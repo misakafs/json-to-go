@@ -33,7 +33,7 @@
 import { onMounted, ref } from 'vue'
 import Clipboard from 'clipboard'
 import { useEditor, Mode } from '../editor'
-import { useRightEditorEvent, setLeftEditorTransform } from '../bus/event'
+import { useRightEditorEvent, onLeftEditorTransform } from '../bus/event'
 
 const { editor } = useEditor('rightEditor', Mode.hjson)
 useRightEditorEvent(editor)
@@ -46,7 +46,7 @@ const aboutFn = () => {
 
 // 刷新
 const refreshFn = () => {
-    setLeftEditorTransform()
+    onLeftEditorTransform()
 }
 
 // 复制

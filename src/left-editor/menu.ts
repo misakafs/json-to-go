@@ -1,9 +1,11 @@
 import { ref } from 'vue'
-import { setLeftEditorValue, setLeftEditorCheck, setLeftEditorFmt, setLeftEditorCompress } from '../bus/event'
+import { setLeftEditorValue, onLeftEditorCheck, onLeftEditorFmt, onLeftEditorCompress } from '../bus/event'
 
 const demo1 = `{"a":1}`
-const demo2 = `{"b":2}`
-const demo3 = `{"b":3}`
+const demo2 = `{
+    b:1,
+    c:dad}`
+const demo3 = `[a,1,true,false,f]`
 
 export function useMenu() {
     const items = ref([
@@ -36,19 +38,19 @@ export function useMenu() {
                 {
                     label: 'JSON纠正',
                     command: () => {
-                        setLeftEditorCheck()
+                        onLeftEditorCheck()
                     }
                 },
                 {
                     label: 'JSON格式化',
                     command: () => {
-                        setLeftEditorFmt()
+                        onLeftEditorFmt()
                     }
                 },
                 {
                     label: 'JSON压缩',
                     command: () => {
-                        setLeftEditorCompress()
+                        onLeftEditorCompress()
                     }
                 }
             ]

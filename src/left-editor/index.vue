@@ -34,7 +34,7 @@ import Clipboard from 'clipboard'
 import debounce from 'debounce'
 import { useEditor, Mode } from '../editor'
 import { useMenu } from './menu'
-import { useLeftEditorEvent, setLeftEditorValue, setLeftEditorTransform } from '../bus/event'
+import { useLeftEditorEvent, setLeftEditorValue, onLeftEditorTransform } from '../bus/event'
 
 const { editor } = useEditor('leftEditor', Mode.hjson)
 const { items, menu, toggleFn } = useMenu()
@@ -42,11 +42,11 @@ useLeftEditorEvent(editor)
 
 onMounted(() => {
     editor.value.on('blur', function() {
-        setLeftEditorTransform()
+        onLeftEditorTransform()
     })
 
     editor.value.on('change', debounce(function() {
-        setLeftEditorTransform()
+        onLeftEditorTransform()
     }, 500))
 })
 
@@ -72,6 +72,6 @@ onMounted(() => {
 
 // 转换
 const transformFn = () => {
-    setLeftEditorTransform()
+    onLeftEditorTransform()
 }
 </script>
