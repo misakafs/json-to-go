@@ -45,6 +45,7 @@ export function useLeftEditorEvent(editor: Ref<Ace.Editor>) {
     // 监听值变化
     bus.on(LEFT_EDITOR_SET, val => {
         editor.value.setValue(val)
+        editor.value.execCommand("gotolineend")
         onLeftEditorTransform()
     })
 
@@ -78,5 +79,6 @@ export function useRightEditorEvent(editor: Ref<Ace.Editor>) {
     // 监听值变化
     bus.on(RIGHT_EDITOR_SET, val => {
         editor.value.setValue(val)
+        editor.value.execCommand("gotolineend")
     })
 }
