@@ -20,13 +20,13 @@
     "mitt": "^2.1.0",
     "primeicons": "^4.1.0",
     "primevue": "^3.5.0",
-    "vue": "^3.0.11"
+    "vue": "^3.0.11",
+    "web-storage-cache": "^1.1.1"
   },
   "devDependencies": {
     "@types/ace": "^0.0.46",
     "@types/debounce": "^1.2.0",
     "@types/jest": "^26.0.23",
-    "@types/vfile-message": "^2.0.0",
     "@vitejs/plugin-vue": "^1.2.2",
     "@vue/compiler-sfc": "^3.0.11",
     "autoprefixer": "^10.2.5",

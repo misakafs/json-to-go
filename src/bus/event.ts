@@ -88,7 +88,6 @@ export function useLeftEditorEvent(editor: Ref<Ace.Editor>) {
     })
 
     bus.on(LEFT_EDITOR_TRANSFORM, () => {
-        console.log('_setting:', _setting)
         const s = cg.do(_setting.codegenStrategy, editor.value.getValue(), _setting.opt)
         setRightEditorValue(s)
     })

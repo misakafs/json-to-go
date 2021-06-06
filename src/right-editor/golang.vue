@@ -20,8 +20,9 @@
 </template>
 
 <script lang='ts' setup>
-import { watchEffect, ref, onMounted } from 'vue'
+import { watch, ref, onMounted } from 'vue'
 import { setCodegenStrategyOption } from '../bus/event'
+import cache from '../cache'
 
 // 是否内联类型定义
 const inline = ref(false)
@@ -33,24 +34,28 @@ const tags = ref(['json'])
 const rootName = ref('Root')
 
 const emit = () => {
-    setCodegenStrategyOption({
+    const opt = {
         inline: inline.value,
         tags: tags.value,
         rootName: rootName.value,
-    })
+    }
+    cache.set('opt.golang', opt)
+    setCodegenStrategyOption(opt)
 }
 
-watchEffect(() => {
+watch([inline, tags, rootName], () => {
     emit()
 })
 
 onMounted(() => {
+    const opt = cache.get('opt.golang')
+    if (opt) {
+        inline.value = opt.inline
+        tags.value = opt.tags
+        rootName.value = opt.rootName
+    }
     emit()
 })
-// - go 添加自定义tag
-//      命名方式
-//      是否内嵌结构体
-//      根对象名
-//      json类型对应go类型
+
 </script>
 

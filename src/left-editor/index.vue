@@ -22,7 +22,6 @@
     </Panel>
     <!--  关于的弹框  -->
     <Dialog header="关于" v-model:visible="displayAboutDialog" :breakpoints="{ '960px': '75vw' }" :style="{ width: '50vw' }" :modal="true">
-        <p></p>
     </Dialog>
 </template>
 

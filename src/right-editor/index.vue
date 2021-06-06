@@ -22,7 +22,7 @@
     </Dialog>
 
     <!--  右侧栏  -->
-    <Sidebar v-model:visible="displayRightSider" :baseZIndex="1000" position="right">
+    <Sidebar v-model:visible="displayRightSider" :baseZIndex="1000" position="right" class="p-sidebar-lg" :showCloseIcon='false'>
         <Panel header="设置">
             <div class="p-field-checkbox">
                 <Checkbox id="binary" v-model="readonly" :binary="true" />
@@ -38,7 +38,9 @@
                placeholder="选择一门开发语言" />
             <br>
             <br>
-            <golang></golang>
+            <keep-alive>
+                <component :is='golang'></component>
+            </keep-alive>
         </Panel>
 
     </Sidebar>
