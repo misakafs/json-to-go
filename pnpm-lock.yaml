@@ -3,7 +3,9 @@ lockfileVersion: 5.3
 specifiers:
   '@types/ace': ^0.0.46
   '@types/debounce': ^1.2.0
+  '@types/humps': ^2.0.0
   '@types/jest': ^26.0.23
+  '@types/vfile-message': ^2.0.0
   '@vitejs/plugin-vue': ^1.2.2
   '@vue/compiler-sfc': ^3.0.11
   ace-builds: ^1.4.12
@@ -11,6 +13,7 @@ specifiers:
   clipboard: ^2.0.8
   debounce: ^1.2.1
   gofmt.js: ^0.0.2
+  humps: ^2.0.1
   jest: ^27.0.4
   mitt: ^2.1.0
   postcss: ^8.2.15
@@ -33,6 +36,7 @@ dependencies:
   clipboard: registry.nlark.com/clipboard/2.0.8
   debounce: registry.nlark.com/debounce/1.2.1
   gofmt.js: registry.nlark.com/gofmt.js/0.0.2
+  humps: registry.nlark.com/humps/2.0.1
   mitt: registry.nlark.com/mitt/2.1.0
   primeicons: registry.nlark.com/primeicons/4.1.0
   primevue: registry.nlark.com/primevue/3.5.0
@@ -42,7 +46,9 @@ dependencies:
 devDependencies:
   '@types/ace': registry.nlark.com/@types/ace/0.0.46
   '@types/debounce': registry.nlark.com/@types/debounce/1.2.0
+  '@types/humps': registry.nlark.com/@types/humps/2.0.0
   '@types/jest': registry.nlark.com/@types/jest/26.0.23
+  '@types/vfile-message': registry.nlark.com/@types/vfile-message/2.0.0
   '@vitejs/plugin-vue': registry.nlark.com/@vitejs/plugin-vue/1.2.3_@vue+compiler-sfc@3.0.11
   '@vue/compiler-sfc': registry.nlark.com/@vue/compiler-sfc/3.0.11_vue@3.0.11
   autoprefixer: registry.nlark.com/autoprefixer/10.2.6_postcss@8.3.0
@@ -972,6 +978,12 @@ packages:
     version: 4.1.5
     dependencies:
       '@types/node': registry.nlark.com/@types/node/15.12.1
+    dev: true
+
+  registry.nlark.com/@types/humps/2.0.0:
+    resolution: {integrity: sha1-mtB4Ac00+dnON5+mb2LTBJk32BU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@types/humps/download/@types/humps-2.0.0.tgz}
+    name: '@types/humps'
+    version: 2.0.0
     dev: true
 
   registry.nlark.com/@types/istanbul-lib-coverage/2.0.3:
@@ -2866,6 +2878,12 @@ packages:
     version: 2.1.0
     engines: {node: '>=10.17.0'}
     dev: true
+
+  registry.nlark.com/humps/2.0.1:
+    resolution: {integrity: sha1-3QLqYIG9BWjcXQcxhEY5V7qe+ao=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/humps/download/humps-2.0.1.tgz}
+    name: humps
+    version: 2.0.1
+    dev: false
 
   registry.nlark.com/iconv-lite/0.4.24:
     resolution: {integrity: sha1-ICK0sl+93CHS9SSXSkdKr+czkIs=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/iconv-lite/download/iconv-lite-0.4.24.tgz}
