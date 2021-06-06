@@ -78,6 +78,14 @@ test('测试复杂对象-8', () => {
     expect(run(s)).toBe(`{"1":"a","2":"b","3":"c"}`)
 })
 
+test('测试复杂对象-9', () => {
+    const s = `{
+    b:1,
+    c:dad
+    }`
+    expect(run(s)).toBe(`{"b":1,"c":"dad"}`)
+})
+
 test('语法扩展-1', () => {
     const s = `{
         "a":123

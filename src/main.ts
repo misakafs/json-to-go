@@ -16,9 +16,14 @@ import Splitter from 'primevue/splitter'
 import SplitterPanel from 'primevue/splitterpanel'
 import Dialog from 'primevue/dialog'
 import Sidebar from 'primevue/sidebar'
+import Checkbox from 'primevue/checkbox';
+import CascadeSelect from 'primevue/cascadeselect'
+import SelectButton from 'primevue/selectbutton'
+import InputText from 'primevue/inputtext'
+import Chips from 'primevue/chips'
 
 // 样式
-import 'primevue/resources/themes/saga-blue/theme.css'
+import 'primevue/resources/themes/saga-purple/theme.css'
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
 import './styles/index.scss'
@@ -38,6 +43,11 @@ app.component('Splitter', Splitter)
 app.component('SplitterPanel', SplitterPanel)
 app.component('Dialog', Dialog)
 app.component('Sidebar', Sidebar)
+app.component('Checkbox', Checkbox)
+app.component('CascadeSelect', CascadeSelect)
+app.component('SelectButton', SelectButton)
+app.component('InputText', InputText)
+app.component('Chips', Chips)
 // 不加这个使用Menu会警告️，primevue
 app.component('router-link', {})
 

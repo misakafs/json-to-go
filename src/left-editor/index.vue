@@ -22,9 +22,7 @@
     </Panel>
     <!--  关于的弹框  -->
     <Dialog header="关于" v-model:visible="displayAboutDialog" :breakpoints="{ '960px': '75vw' }" :style="{ width: '50vw' }" :modal="true">
-        <p>
-
-        </p>
+        <p></p>
     </Dialog>
 </template>
 
@@ -41,13 +39,16 @@ const { items, menu, toggleFn } = useMenu()
 useLeftEditorEvent(editor)
 
 onMounted(() => {
-    editor.value.on('blur', function() {
+    editor.value.setOption("wrap", "free")
+    editor.value.on('blur', function () {
         onLeftEditorTransform()
     })
-
-    editor.value.on('change', debounce(function() {
-        onLeftEditorTransform()
-    }, 500))
+    editor.value.on(
+        'change',
+        debounce(function () {
+            onLeftEditorTransform()
+        }, 500)
+    )
 })
 
 // 关于
@@ -59,6 +60,7 @@ const aboutFn = () => {
 // 清空
 const cleanFn = () => {
     setLeftEditorValue('')
+    onLeftEditorTransform()
 }
 
 // 复制

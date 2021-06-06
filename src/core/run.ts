@@ -7,11 +7,14 @@ import { CodegenJson } from './codegen_json'
 function run(s: string): string {
     // 扫描器生成tokens
     const scan = new Scanner(s)
+    // console.log(scan.tokens)
     // 将tokens解析成树结构
     const parser = new Parser(scan.tokens)
-    console.log(JSON.stringify(parser.root, null, 2))
+    // console.log(JSON.stringify(parser.root, null, 2))
     // 生成json字符串
-    const codegen = new CodegenJson(parser.root)
+    const codegen = new CodegenJson(parser.root, {
+        format: true
+    })
     // const codegen = new CodegenGo(parser.root)
     // return JSON.stringify(codegen.root, function(key,value) {
     //     console.log(key,value)
@@ -19,5 +22,5 @@ function run(s: string): string {
     return codegen.json
 }
 
-const s = `{"a":1,"b":{"c":true,"d":null,"e":{"f":"xxx"}}}`
+const s = `[a b c {c:false} true null]`
 console.log(run(s))

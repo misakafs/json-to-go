@@ -1,9 +1,6 @@
-* {
+body {
     padding: 0;
     margin: 0;
-}
-
-body {
 }
 
 main {
@@ -18,5 +15,6 @@ main {
     .editor {
         min-height: calc(100vh - 52px) !important;
         font-size: 16px;
+        margin: 0;
     }
 }

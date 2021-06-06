@@ -125,7 +125,7 @@ export class Scanner {
 
     parseString(quote: string = ''): TokenEmpty {
         let i = this.index
-        let sep = [':', ' ', ']', '}', ',']
+        let sep = [':', ' ', ']', '}', ',', '\n', '\r']
         if (quote.length) {
             sep = [quote]
             i++

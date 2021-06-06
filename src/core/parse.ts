@@ -54,6 +54,9 @@ export class Parser {
         this.size = tokens.length
         this.index = 0
         this.root = new Node()
+        if (!this.size) {
+            return
+        }
         this.parse(this.root)
     }
 
