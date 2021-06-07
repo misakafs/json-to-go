@@ -16,16 +16,14 @@ import Splitter from 'primevue/splitter'
 import SplitterPanel from 'primevue/splitterpanel'
 import Dialog from 'primevue/dialog'
 import Sidebar from 'primevue/sidebar'
-import Checkbox from 'primevue/checkbox';
+import Checkbox from 'primevue/checkbox'
 import CascadeSelect from 'primevue/cascadeselect'
 import SelectButton from 'primevue/selectbutton'
 import InputText from 'primevue/inputtext'
 import Chips from 'primevue/chips'
 
 // 样式
-import 'primevue/resources/themes/saga-purple/theme.css'
 import 'primevue/resources/primevue.min.css'
-import 'primeicons/primeicons.css'
 import './styles/index.scss'
 
 const app = createApp(App)

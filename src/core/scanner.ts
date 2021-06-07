@@ -4,6 +4,8 @@ type TokenEmpty = Token | null
 
 // 数字
 const numerics = ['.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+// 转义符
+const escapes = ['"', '']
 
 export class Scanner {
     tokens: Token[]
@@ -130,7 +132,13 @@ export class Scanner {
             sep = [quote]
             i++
         }
-        while (sep.indexOf(this.raw[i]) === -1 && !this.finish(i)) {
+        while (!this.finish(i)) {
+            if (this.isEscape(i)) {
+                i += 2
+            }
+            if (sep.indexOf(this.raw[i]) !== -1) {
+                break
+            }
             i++
         }
         const start = this.index + quote.length
@@ -198,5 +206,16 @@ export class Scanner {
         this.index = endIndex + end.length
         const value = this.raw.slice(nextIndex + 1, endIndex)
         return new Token(TokenType.COMMENT, value, nextIndex + 1)
+    }
+
+    // 判断是否是转义符
+    isEscape(i: number): boolean {
+        if (this.raw[i] !== '\\') {
+            return false
+        }
+        if (escapes.indexOf(this.raw[i + 1]) > -1) {
+            return true
+        }
+        return false
     }
 }

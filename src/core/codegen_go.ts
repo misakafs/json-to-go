@@ -1,6 +1,7 @@
-import humps from 'humps/index'
 import { TokenType } from './token'
 import { Node, NodeType } from './parse'
+import { Option } from './types'
+import { getName } from '../util/index'
 
 // GO内置类型
 export enum GoKind {
@@ -30,63 +31,48 @@ export function getGoKind(tokenType: TokenType): GoKind {
     }
 }
 
-// Tag的命名方式
-const tagNamedWays = {
-    // abcDef
-    0: function(s:string):string {
-        return humps.camelize(s)
-    },
-    // AbcDef
-    1: function(s:string):string {
-        return humps.pascalize(s)
-    },
-    // abc_def
-    2: function(s:string):string {
-        return humps.decamelize(s)
-    },
-    // Abcdef
-    3: function(s:string):string {
-        s = humps.decamelize(s,{ separator: '' })
-        return s.replace(s[0], s[0].toUpperCase())
-    },
-    // abcdef
-    4: function(s:string):string {
-        return humps.decamelize(s,{ separator: '' })
-    },
-}
+export class CodegenGo {
+    content: string
+    opt?: Option
 
-class GoNode {
-    name: string
-    kind: GoKind
-    childs: GoNode[]
-
-    constructor(name: string = 'Root', kind: GoKind = GoKind.OBJECT) {
-        this.name = name
-        this.kind = kind
-        this.childs = new Array()
+    constructor(node: Node, opt?: Option) {
+        this.content = 'func main() {\nprintln() }'
+        this.opt = opt
+        this.traverseTree(node)
     }
 
-    addChild(goNode: GoNode) {
-        this.childs.push(goNode)
+    // 生成tag
+    genTags(name: string): string {
+        if (!this.opt?.tags?.length) {
+            return ''
+        }
+        const tags = this.opt.tags as string[]
+        const length = tags.length
+        let s = '`'
+        for (let i = 0; i < length; i++) {
+            const cols = tags[i].split('|')
+            if (!cols.length) {
+                continue
+            }
+            const tagName = getName(Number.parseInt(cols[1] ?? '0'), name)
+            s += `${cols[0]}:"${tagName}"`
+            if (i < length - 1) {
+                s += ','
+            }
+        }
+        s += '`'
+        return s
+    }
+
+    // 格式化
+    format(): string {
+        return ''
+    }
+
+    // 遍历树
+    traverseTree(node: Node) {
+        if (node.nodeType === NodeType.OBJECT && node.size) {
+            for (let i = 0; i < node.size; i++) {}
+        }
     }
 }
-
-// export class CodegenGo {
-//     root: GoNode
-//
-//     constructor(node: Node) {
-//         this.root = new GoNode()
-//
-//         this.traverseTree(node)
-//     }
-//
-//     // 遍历树
-//     traverseTree(node: Node) {
-//         if (node.nodeType === NodeType.OBJECT && node.size) {
-//             for (let i = 0; i < node.size; i++) {
-//                 const gn = new GoNode(node.childs[i].key.value, getGoKind(node.childs[i].value?.tokenType))
-//                 this.root.addChild(gn)
-//             }
-//         }
-//     }
-// }

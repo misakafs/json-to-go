@@ -22,27 +22,20 @@
     </Dialog>
 
     <!--  右侧栏  -->
-    <Sidebar v-model:visible="displayRightSider" :baseZIndex="1000" position="right" class="p-sidebar-lg" :showCloseIcon='false'>
+    <Sidebar v-model:visible="displayRightSider" :baseZIndex="1000" position="right" class="p-sidebar-lg" :showCloseIcon="false">
         <Panel header="设置">
             <div class="p-field-checkbox">
                 <Checkbox id="binary" v-model="readonly" :binary="true" />
                 <label for="binary"> 是否只读</label>
             </div>
-            <br>
-            <CascadeSelect
-                @change='change'
-                v-model="devLang"
-               :options="devLangs"
-               :optionGroupChildren='[]'
-               optionLabel="name"
-               placeholder="选择一门开发语言" />
-            <br>
-            <br>
+            <br />
+            <CascadeSelect @change="change" v-model="devLang" :options="devLangs" :optionGroupChildren="[]" optionLabel="name" placeholder="选择一门开发语言" />
+            <br />
+            <br />
             <keep-alive>
-                <component :is='golang'></component>
+                <component :is="golang"></component>
             </keep-alive>
         </Panel>
-
     </Sidebar>
 </template>
 
@@ -94,7 +87,7 @@ watchEffect(() => {
 })
 
 // --- 选择开发语言
-const devLang = ref({name: "Golang", code: 1})
+const devLang = ref({ name: 'Golang', code: 1 })
 const devLangs = ref([
     {
         name: 'Golang',

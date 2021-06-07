@@ -21,8 +21,7 @@
         <pre id="leftEditor" class="editor"></pre>
     </Panel>
     <!--  关于的弹框  -->
-    <Dialog header="关于" v-model:visible="displayAboutDialog" :breakpoints="{ '960px': '75vw' }" :style="{ width: '50vw' }" :modal="true">
-    </Dialog>
+    <Dialog header="关于" v-model:visible="displayAboutDialog" :breakpoints="{ '960px': '75vw' }" :style="{ width: '50vw' }" :modal="true"> </Dialog>
 </template>
 
 <script lang="ts" setup>
@@ -38,7 +37,7 @@ const { items, menu, toggleFn } = useMenu()
 useLeftEditorEvent(editor)
 
 onMounted(() => {
-    editor.value.setOption("wrap", "free")
+    editor.value.setOption('wrap', 'free')
     editor.value.on('blur', function () {
         onLeftEditorTransform()
     })

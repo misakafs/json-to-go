@@ -7,7 +7,7 @@
     <InputText type="text" v-model="rootName"></InputText>
     <h5>自定义Tag(回车确认)</h5>
     <p>tag后面接序号可以指定命名方式</p>
-    <p>eg: json|3, form|2 </p>
+    <p>eg: json|3, form|2</p>
     <Chips v-model="tags"></Chips>
     <div>
         <h6>命名方式</h6>
@@ -19,7 +19,7 @@
     </div>
 </template>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { watch, ref, onMounted } from 'vue'
 import { setCodegenStrategyOption } from '../bus/event'
 import cache from '../cache'
@@ -37,7 +37,7 @@ const emit = () => {
     const opt = {
         inline: inline.value,
         tags: tags.value,
-        rootName: rootName.value,
+        rootName: rootName.value
     }
     cache.set('opt.golang', opt)
     setCodegenStrategyOption(opt)
@@ -56,6 +56,4 @@ onMounted(() => {
     }
     emit()
 })
-
 </script>
-

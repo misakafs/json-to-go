@@ -14,7 +14,7 @@ interface ISetting {
     opt?: Option
 }
 const _setting: ISetting = {
-    codegenStrategy: CodegenStrategy.GOLANG,
+    codegenStrategy: CodegenStrategy.GOLANG
 }
 
 // 设置策略
@@ -65,7 +65,7 @@ export function useLeftEditorEvent(editor: Ref<Ace.Editor>) {
     // 监听值变化
     bus.on(LEFT_EDITOR_SET, val => {
         editor.value.setValue(val)
-        editor.value.execCommand("gotolineend")
+        editor.value.execCommand('gotolineend')
     })
 
     bus.on(LEFT_EDITOR_CHECK, () => {
@@ -93,11 +93,9 @@ export function useLeftEditorEvent(editor: Ref<Ace.Editor>) {
     })
 }
 
-
 // 右侧部分
 const RIGHT_EDITOR_SET = 'right.editor.set'
 const RIGHT_EDITOR_READONLY = 'right.editor.readonly'
-
 
 export const setRightEditorValue = (val: string) => {
     bus.emit(RIGHT_EDITOR_SET, val)
@@ -119,5 +117,3 @@ export function useRightEditorEvent(editor: Ref<Ace.Editor>) {
         editor.value.setReadOnly(val)
     })
 }
-
-
