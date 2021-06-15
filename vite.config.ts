@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+// @ts-ignore
 import externalGlobals from 'rollup-plugin-external-globals'
 
-const base = process.env.PROD ? '/json-to-x/' : '/'
+const base = process.env.NODE_ENV === 'production' ? '/json-to-x/docs/' : '/'
 
 // https://vitejs.dev/config/
 export default defineConfig({
