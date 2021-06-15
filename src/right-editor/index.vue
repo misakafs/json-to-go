@@ -5,7 +5,7 @@
                 <span class="pi pi-question"></span>
             </button>
             <button class="p-panel-header-icon p-link p-mr-4" v-tooltip.bottom="readonlyWord" @click="switchReadonly">
-                <span class="pi" :class='readonlyIcon'></span>
+                <span class="pi" :class="readonlyIcon"></span>
             </button>
             <button class="p-panel-header-icon p-link p-mr-2" v-tooltip.bottom="'刷新'" @click="refreshFn">
                 <span class="pi pi-refresh"></span>
@@ -46,7 +46,7 @@ import { useRightEditorEvent, onLeftEditorTransform, setCodegenStrategy } from '
 // 引入组件
 import golang from './golang.vue'
 
-const { editor } = useEditor('rightEditor', Mode.hjson)
+const { editor } = useEditor('rightEditor', Mode.go)
 useRightEditorEvent(editor)
 
 // 关于
@@ -85,7 +85,6 @@ const displayRightSider = ref(false)
 const settingFn = () => {
     displayRightSider.value = true
 }
-
 
 // --- 选择开发语言
 const devLang = ref({ name: 'Golang', code: 1 })

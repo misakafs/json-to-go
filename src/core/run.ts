@@ -18,7 +18,7 @@ function run(s: string): string {
     //     console.log(key,value)
     // }, 2)
     // console.log(codegen.result)
-    return ""
+    return ''
 }
 
 // const s = `{"c":[[{"d":[{"e":[true]}]}]]}`
@@ -29,8 +29,9 @@ function run(s: string): string {
 // const s = `[{"a":1231},{"a":1231, "b":123},{"a":1231}]`
 // const s = `[[[{"a":1231},{"a":1231, "b":123},{"a":1231}]]]`
 // const s = `[[{"a":1231},{"a":1231, "b":[[[1,2]]]},{"a":1231}]]`
-// const s = `{"a":-1231.323,"b":{"z":31,"p":true,"123":"key是字符串"}}`
+// const s = `{"a":-1231.323,"b":{"z":31,"p":true,"-1.23":"key是字符串"}}`
 // const s = `{"a":1,"b":true,"c":false,"d":null,"e":-1.234,"f":"xxx"}`
 // const s = `{"a":1,"b":{"c":true,"d":null,"e":{"f":"xxx"}}}`
-const s = `{a:132,b:true,a:1.23,b:null,c:xxwda,f:{g:sda},b:0}`
+// const s = `{a:132,b:true,a:1.23,b:null,c:xxwda,f:{g:sda},b:0}`
+const s = `[a b c {c:false} true null]`
 console.log(run(s))

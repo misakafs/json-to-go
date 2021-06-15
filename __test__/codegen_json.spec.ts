@@ -92,7 +92,6 @@ test('测试复杂对象-10', () => {
     expect(run(s)).toBe(s)
 })
 
-
 test('语法扩展-1', () => {
     const s = `{
         "a":123
