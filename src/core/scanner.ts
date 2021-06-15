@@ -24,7 +24,6 @@ export class Scanner {
     tokenize() {
         for (;;) {
             const token = this.getToken()
-            // console.log(token)
             if (token) {
                 this.tokens.push(token)
                 continue

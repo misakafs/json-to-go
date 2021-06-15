@@ -19,13 +19,23 @@ export class Node {
         this.nodeType = NodeType.BASE
     }
 
-    addValue(node: Node) {
+    addNode(node: Node) {
         if (this.value instanceof Token) {
             return
         }
         if (!this.value) {
             this.value = new Array()
         }
+        if (node?.key?.value) {
+            for (let i = 0; i < this.size; i++) {
+                // 已经存在, 替换
+                if (this.value[i].key?.value === node.key.value) {
+                    this.value[i] = node
+                    return
+                }
+            }
+        }
+
         this.value.push(node)
         this.size++
     }
@@ -61,16 +71,15 @@ export class Parser {
     }
 
     parse(root: Node, level: number = 1) {
-        if (this.tokens[this.index].tokenType === TokenType.OPEN_OBJECT) {
-            root.nodeType = NodeType.OBJECT
-            this.index++
-            this.parseObject(root, level)
-        }
         if (this.tokens[this.index].tokenType === TokenType.OPEN_ARRAY) {
             root.nodeType = NodeType.ARRAY
             this.index++
             this.parseArray(root, level)
+            return
         }
+        root.nodeType = NodeType.OBJECT
+        this.index++
+        this.parseObject(root, level)
     }
 
     parseObject(root: Node, level: number = 0) {
@@ -92,7 +101,7 @@ export class Parser {
                     this.index++
                     this.parse(node, level + 1)
                 }
-                root.addValue(node)
+                root.addNode(node)
             }
         }
     }
@@ -112,7 +121,7 @@ export class Parser {
             } else {
                 this.parse(node, level + 1)
             }
-            root.addValue(node)
+            root.addNode(node)
         }
     }
 

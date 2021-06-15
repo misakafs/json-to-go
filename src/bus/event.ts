@@ -95,15 +95,9 @@ export function useLeftEditorEvent(editor: Ref<Ace.Editor>) {
 
 // 右侧部分
 const RIGHT_EDITOR_SET = 'right.editor.set'
-const RIGHT_EDITOR_READONLY = 'right.editor.readonly'
 
 export const setRightEditorValue = (val: string) => {
     bus.emit(RIGHT_EDITOR_SET, val)
-}
-
-// 设置只读
-export const setRightEditorReadonly = (val: boolean) => {
-    bus.emit(RIGHT_EDITOR_READONLY, val)
 }
 
 export function useRightEditorEvent(editor: Ref<Ace.Editor>) {
@@ -111,9 +105,5 @@ export function useRightEditorEvent(editor: Ref<Ace.Editor>) {
     bus.on(RIGHT_EDITOR_SET, val => {
         editor.value.setValue(val)
         editor.value.execCommand('gotolineend')
-    })
-
-    bus.on(RIGHT_EDITOR_READONLY, val => {
-        editor.value.setReadOnly(val)
     })
 }

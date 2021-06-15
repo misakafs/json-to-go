@@ -3,6 +3,7 @@ import { Scanner } from './scanner'
 import { Parser } from './parse'
 import { Option } from './types'
 import { CodegenJson } from './codegen_json'
+import { CodegenGo } from './codegen_go'
 // import { CodegenGo } from "./codegen_go";
 
 export enum CodegenStrategy {
@@ -25,10 +26,10 @@ const jsonStrategy = new JsonStrategy()
 
 class GolangStrategy implements Strategy {
     codegen(node: Node, opt?: Option): string {
-        return new CodegenJson(node).json
+        return new CodegenGo(node).result
     }
 }
-const golangStrategy = new JsonStrategy()
+const golangStrategy = new GolangStrategy()
 
 class YamlStrategy implements Strategy {
     codegen(node: Node, opt?: Option): string {
@@ -44,10 +45,13 @@ export class Codegen {
         switch (strategy) {
             case CodegenStrategy.JSON:
                 this.strategy = jsonStrategy
+                break
             case CodegenStrategy.GOLANG:
                 this.strategy = golangStrategy
+                break
             case CodegenStrategy.YAML:
                 this.strategy = yamlStrategy
+                break
         }
     }
 

@@ -30,7 +30,7 @@ import Clipboard from 'clipboard'
 import debounce from 'debounce'
 import { useEditor, Mode } from '../editor'
 import { useMenu } from './menu'
-import { useLeftEditorEvent, setLeftEditorValue, onLeftEditorTransform } from '../bus/event'
+import { useLeftEditorEvent, setLeftEditorValue, onLeftEditorTransform, setCodegenStrategyOption } from '../bus/event'
 
 const { editor } = useEditor('leftEditor', Mode.hjson)
 const { items, menu, toggleFn } = useMenu()
@@ -39,12 +39,12 @@ useLeftEditorEvent(editor)
 onMounted(() => {
     editor.value.setOption('wrap', 'free')
     editor.value.on('blur', function () {
-        onLeftEditorTransform()
+        transformFn()
     })
     editor.value.on(
         'change',
         debounce(function () {
-            onLeftEditorTransform()
+            transformFn()
         }, 500)
     )
 })
@@ -72,6 +72,9 @@ onMounted(() => {
 
 // 转换
 const transformFn = () => {
+    setCodegenStrategyOption({
+        format: true
+    })
     onLeftEditorTransform()
 }
 </script>

@@ -17,8 +17,20 @@ function run(s: string): string {
     // return JSON.stringify(codegen.root, function(key,value) {
     //     console.log(key,value)
     // }, 2)
-    return codegen.format()
+    // console.log(codegen.result)
+    return ""
 }
 
-const s = `{"z":"{\\"a\\": \\"xxx\\"}"}`
+// const s = `{"c":[[{"d":[{"e":[true]}]}]]}`
+// const s = `[[{"d":[{"e":[true]}], "x": 123}]]`
+// const s = `[{}]`
+// const s = `[[[[[[[[[[[[[1]]]]]]]]]]]]]`
+// const s = `[[[[[[[[[[[[[{}]]]]]]]]]]]]]`
+// const s = `[{"a":1231},{"a":1231, "b":123},{"a":1231}]`
+// const s = `[[[{"a":1231},{"a":1231, "b":123},{"a":1231}]]]`
+// const s = `[[{"a":1231},{"a":1231, "b":[[[1,2]]]},{"a":1231}]]`
+// const s = `{"a":-1231.323,"b":{"z":31,"p":true,"123":"key是字符串"}}`
+// const s = `{"a":1,"b":true,"c":false,"d":null,"e":-1.234,"f":"xxx"}`
+// const s = `{"a":1,"b":{"c":true,"d":null,"e":{"f":"xxx"}}}`
+const s = `{a:132,b:true,a:1.23,b:null,c:xxwda,f:{g:sda},b:0}`
 console.log(run(s))

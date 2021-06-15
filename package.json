@@ -9,7 +9,7 @@
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
     "test": "jest",
-    "start": "ts-node src/core/run.ts"
+    "eg": "ts-node src/core/run.ts"
   },
   "license": "MIT",
   "dependencies": {

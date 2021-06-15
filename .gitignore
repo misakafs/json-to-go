@@ -7,3 +7,4 @@ dist-ssr
 *.lock
 upgrade.sh
 /yarn-error.log
+demo.ts
