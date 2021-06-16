@@ -4,13 +4,14 @@ import { Option } from './types'
 
 export class CodegenJson {
     layer: number
-    json: string
+    result: string
     opt?: Option
     constructor(node: Node, opt?: Option) {
         this.layer = 0
-        this.json = ''
+        this.result = ''
         this.opt = opt
         this.traverseTree(node)
+        this.result = this.result.trim()
     }
 
     getIndent(): string {
@@ -38,26 +39,26 @@ export class CodegenJson {
     traverseTree(node: Node) {
         const length = node.size - 1
         if (node.key) {
-            this.json += `${this.getIndent()}"${node.key.value}":${this.getSpace()}`
+            this.result += `${this.getIndent()}"${node.key.value}":${this.getSpace()}`
         }
         this.handlerElement(node)
         if (node.nodeType === NodeType.OBJECT) {
-            this.json += `{${this.getWrapRow()}`
+            this.result += `{${this.getWrapRow()}`
             this.layer++
             for (let i = 0; i < node.size; i++) {
                 this.traverseTree(node.getNodes()[i])
-                this.json += i == length ? `${this.getWrapRow()}` : `,${this.getWrapRow()}`
+                this.result += i == length ? `${this.getWrapRow()}` : `,${this.getWrapRow()}`
             }
             this.layer--
-            this.json += `${this.getIndent()}}`
+            this.result += `${this.getIndent()}}`
         }
         if (node.nodeType === NodeType.ARRAY) {
-            this.json += '['
+            this.result += '['
             for (let i = 0; i < node.size; i++) {
                 this.traverseTree(node.getNodes()[i])
-                this.json += i == length ? '' : `${this.getSpace()},`
+                this.result += i == length ? '' : `${this.getSpace()},`
             }
-            this.json += ']'
+            this.result += ']'
         }
     }
 
@@ -72,10 +73,10 @@ export class CodegenJson {
                     value = Number.parseFloat(value).toString()
                 case TokenType.NULL:
                 case TokenType.BOOLEAN:
-                    this.json += value
+                    this.result += value
                     break
                 case TokenType.STRING:
-                    this.json += `"${value}"`
+                    this.result += `"${value}"`
                     break
             }
         }

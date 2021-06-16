@@ -10,7 +10,7 @@ function run(s: string): string {
     const parser = new Parser(scan.tokens)
     // 生成json字符串
     const codegen = new CodegenJson(parser.root)
-    return codegen.json
+    return codegen.result
 }
 
 test('测试简单对象', () => {

@@ -4,6 +4,7 @@ export interface namedFn {
     function(s: string): string
 }
 
+// 命名方式
 export const namedWays = {
     // abcDef
     0: function (s: string): string {

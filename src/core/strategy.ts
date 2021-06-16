@@ -18,7 +18,7 @@ interface Strategy {
 
 class JsonStrategy implements Strategy {
     codegen(node: Node, opt?: Option): string {
-        let s = new CodegenJson(node, opt).json
+        let s = new CodegenJson(node, opt).result
         return s
     }
 }
@@ -33,7 +33,7 @@ const golangStrategy = new GolangStrategy()
 
 class YamlStrategy implements Strategy {
     codegen(node: Node, opt?: Option): string {
-        return new CodegenJson(node).json
+        return new CodegenJson(node).result
     }
 }
 const yamlStrategy = new JsonStrategy()

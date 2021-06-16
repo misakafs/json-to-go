@@ -12,8 +12,6 @@ enum GoType {
     STRUCT = 'struct'
 }
 
-const baseTypes = [GoType.BOOL.toString(), GoType.STRING.toString(), GoType.INT.toString(), GoType.FLOAT.toString()]
-
 // go节点
 class GoNode {
     name: string
@@ -61,26 +59,51 @@ class GoNode {
     }
 }
 
+type GoEmpty = GoNode | null | undefined
+
+const BaseTypes = [GoType.BOOL.toString(), GoType.INT.toString(), GoType.FLOAT.toString(), GoType.STRING.toString(), GoType.INTERFACE.toString()]
+
+// tag
+interface Tag {
+    name: string   // 名字
+    named: number  // 命名方式
+    omitempty: boolean // 是否忽略该字段
+}
+
 const default_opt = {
-    rootName: 'RootObject'
+    // 根对象名
+    rootName: 'RootObject',
+    // 是否内联
+    inline: false,
+    // tag
+    tags: [{
+        name: 'json',
+        named: 0,
+        omitempty: false
+    }]
 }
 
 export class CodegenGo {
     root?: GoNode
     opt?: Option
     result: string
+    structs: string[]
 
     constructor(node: Node, opt?: Option) {
         this.result = ''
+        this.structs = new Array()
         this.opt = Object.assign({}, default_opt, this.opt)
         const r = this.gen(node)
         if (r) {
-            console.log(JSON.stringify(r, null, '  '))
-            this.codegen(r)
-            console.log(this.result)
+            this.result = this.codegen(r)
+            if (!this.opt?.inline && this.structs.length) {
+                this.result = this.structs.join('\n')
+            }
         }
+        this.result = this.result.trim()
     }
 
+    // 生成go节点树
     gen(node: Node, upType?: NodeType, upNode?: GoNode): GoNode | any {
         let goNode: GoNode | any = null
         switch (node.nodeType) {
@@ -132,53 +155,6 @@ export class CodegenGo {
         return null
     }
 
-    // 生成
-    codegen(node: GoNode, up: string = '') {
-        if (node.kind === GoType.BOOL) {
-            this.result += `${up}${node.name} ${node.kind}\n`
-        }
-        if (node.kind === GoType.INT) {
-            this.result += `${up}${node.name} ${node.kind}\n`
-        }
-        if (node.kind === GoType.FLOAT) {
-            this.result += `${up}${node.name} ${node.kind}\n`
-        }
-        if (node.kind === GoType.STRING) {
-            this.result += `${up}${node.name} ${node.kind}\n`
-        }
-        if (node.kind === GoType.INTERFACE) {
-            this.result += `${up}${node.name} ${node.kind}\n`
-        }
-        if (node.kind === GoType.STRUCT) {
-            this.result += `${up.length ? up : 'type '}${node.name} struct {\n`
-            if (node.childs) {
-                const length = node.childs?.length ?? 0
-                for (let i = 0; i < length; i++) {
-                    this.codegen(node.childs[i], '    ' + up)
-                }
-            }
-            this.result += `${up}}\n`
-        }
-        if (node.kind?.indexOf('[]') !== -1) {
-            const isStruct = (node.kind?.indexOf('struct') ?? -1) > -1
-            if (isStruct) {
-                this.result += `${up.length ? up : 'type '}${node.name} ${node.kind} {\n`
-            } else {
-                this.result += `${up.length ? up : 'type '}${node.name} ${node.kind}\n`
-            }
-
-            if (isStruct && node.childs) {
-                const length = node.childs?.length ?? 0
-                for (let i = 0; i < length; i++) {
-                    this.codegen(node.childs[i], '    ' + up)
-                }
-            }
-
-            if (isStruct) {
-                this.result += `${up}}\n`
-            }
-        }
-    }
     // 获取类型
     getKind(node: Node): string {
         switch (node.nodeType) {
@@ -220,55 +196,109 @@ export class CodegenGo {
         }
         return GoType.INTERFACE
     }
+
+    // 生成代码
+    codegen(node: GoNode, upNode:GoEmpty = null, indent:string = ''): string {
+        let padNameNumber = 0
+        let padKindNumber = 0
+        if (upNode) {
+            padNameNumber = upNode.childNameMaxLength
+            padKindNumber = upNode.childKindMaxLength
+        }
+        let result = ''
+
+        if (node.kind && BaseTypes.indexOf(node.kind) !== -1) {
+            result += `${indent}${getName(1,node.name).padEnd(padNameNumber)} ${node.kind.padEnd(padKindNumber)}\n`
+        }
+
+        if (this.opt?.inline) {
+            result += this.codegen_inline(node, upNode, indent)
+        } else {
+            result += this.codegen_noinline(node, upNode, indent)
+        }
+        return result
+    }
+
+    // 生成内联
+    codegen_inline(node: GoNode, upNode:GoEmpty = null, indent:string = ''): string{
+        let result = ''
+        if (node.kind === GoType.STRUCT) {
+            result += `${indent.length ? indent : 'type '}${node.name} struct {\n`
+            if (node.childs) {
+                const length = node.childs?.length ?? 0
+                for (let i = 0; i < length; i++) {
+                    result += this.codegen(node.childs[i], node, '    ')
+                }
+            }
+            result += `${indent}}\n`
+        }
+        if (node.kind?.indexOf('[]') !== -1) {
+            const isStruct = (node.kind?.indexOf('struct') ?? -1) > -1
+            result += `${indent.length ? indent : 'type '}${node.name} ${node.kind}`
+            if (isStruct) {
+                result += ` {\n`
+            } else {
+                result += `\n`
+            }
+            if (isStruct && node.childs) {
+                const length = node.childs?.length ?? 0
+                for (let i = 0; i < length; i++) {
+                    result += this.codegen(node.childs[i], node,'    ' + indent)
+                }
+            }
+            if (isStruct) {
+                result += `${indent}}\n`
+            }
+        }
+        return result
+    }
+
+    // 非内联
+    codegen_noinline(node: GoNode, upNode:GoEmpty = null, indent:string = ''): string{
+        let padNameNumber = 0
+        let padKindNumber = 0
+        if (upNode) {
+            padNameNumber = upNode.childNameMaxLength
+            padKindNumber = upNode.childKindMaxLength
+        }
+        let result = ''
+        if (node.kind === GoType.STRUCT) {
+            let r = ''
+            if (upNode) {
+                result += `${indent.length ? indent : 'type '}${getName(1, node.name).padEnd(padNameNumber)} ${getName(1, node.name).padEnd(padKindNumber)}\n`
+            }
+            r += `type ${getName(1, node.name)} struct {\n`
+
+            if (node.childs) {
+                const length = node.childs?.length ?? 0
+                for (let i = 0; i < length; i++) {
+                    r += this.codegen(node.childs[i], node,'    ')
+                }
+            }
+            r += `}\n`
+            this.structs.unshift(r)
+        }
+        if (node.kind?.indexOf('[]') !== -1) {
+            const isStruct = (node.kind?.indexOf('struct') ?? -1) > -1
+            let r = ''
+            if (isStruct) {
+                r += `type ${getName(1, node.name)} ${indent.length ? 'struct' : node.kind} {\n`
+                result += `${indent}${getName(1, node.name).padEnd(padNameNumber)} ${node.kind?.replaceAll('struct','')}${getName(1, node.name)}\n`
+            } else {
+                result += `${indent.length ? indent : 'type '}${getName(1, node.name)} ${node.kind}\n`
+            }
+
+            if (isStruct && node.childs) {
+                const length = node.childs?.length ?? 0
+                for (let i = 0; i < length; i++) {
+                    r += this.codegen(node.childs[i], node,'    ')
+                }
+            }
+            if (isStruct) {
+                r += `}\n`
+                this.structs.unshift(r)
+            }
+        }
+        return result
+    }
 }
-
-/*
-[{"a":1231},{"a":1231, "b":123},{"a":1231}]
-type Root struct {
-    A int `json:"a"`
-    B int `json:"b,omitempty"`
-}
-
-[[[[[[[[[[[[[1]]]]]]]]]]]]]
-type Root [][][][][][][][][][][][][]int
-
-{"c":[[{"d":[{"e":[true]}]}]]}
-type E struct {
-    E []bool `json:"e`
-}
-type D struct {
-    E []E `json:"d"`
-}
-type Root struct {
-    C [][]D `json:"c"`
-}
-
-{"a":1,"b":true,"c":false,"d":null,"e":-1.234,"f":"xxx"}
-type Root struct {
-    A int `json:"a"`
-    B bool `json:"b"`
-    C bool `json:"c"`
-    D interface{} `json:"d"`
-    E float64 `json:"e"`
-    F string `json:"f"`
-}
-
-[[{"d":[{"e":[true]}],"x":123}]]
-type Root [][]struct {
-	D []D `json:"d"`
-	X int `json:"x"`
-}
-type D struct {
-	E []bool `json:"e"`
-}
-
-
-[]
-type Root []interface{}
-
-{}
-type Root struct{}
-
-[{}]
-type Root []struct{}
- */
