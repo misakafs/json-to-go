@@ -17,10 +17,6 @@ export function useEditor(id: string, mode?: Mode) {
         if (mode) {
             editor.value.session.setMode(mode)
         }
-        // 禁用语法检查
-        // editor.value.getSession().setUseWorker(false)
-        // editor.value.on('blur', function (delta) {
-        // })
     })
     return {
         editor: editor as Ref<Ace.Editor>

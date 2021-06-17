@@ -33,7 +33,7 @@ export const setCodegenStrategyOption = (opt?: Option) => {
         const tags = new Array()
         for (let i = 0; i < ts.length; i++) {
             const arr = ts[i].split(':')
-            if(!arr[0]) {
+            if (!arr[0]) {
                 continue
             }
             tags.push({

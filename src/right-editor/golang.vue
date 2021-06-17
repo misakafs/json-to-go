@@ -6,8 +6,7 @@
     <h5>根对象名</h5>
     <InputText type="text" v-model="rootName"></InputText>
     <h5>自定义Tag <a href="https://github.com/misakafs/json-to-go/blob/main/README.md#%E8%87%AA%E5%AE%9A%E4%B9%89tag" target="_blank">使用教程</a></h5>
-	<InputText type="text" v-model="tag"></InputText>
-
+    <InputText type="text" v-model="tag"></InputText>
 </template>
 
 <script lang="ts" setup>
@@ -42,7 +41,7 @@ onMounted(() => {
     const opt = cache.get('opt.golang')
     if (opt) {
         inline.value = opt.inline
-	    tag.value = opt.tag
+        tag.value = opt.tag
         rootName.value = opt.rootName
     }
     emit()

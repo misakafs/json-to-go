@@ -48,11 +48,11 @@ class GoNode {
     }
 
     // 处理一些特殊的 不规范的key
-    _handlerName(name: string):string{
+    _handlerName(name: string): string {
         name = name.trim()
         if (name === '') {
             name = 'EmptyField' + seq
-            seq ++
+            seq++
         }
         // 不符合规范的名字
         if (!regex.test(name)) {
@@ -61,7 +61,7 @@ class GoNode {
             } else {
                 name = 'StringField' + seq
             }
-            seq ++
+            seq++
         }
         return name
     }
@@ -154,9 +154,9 @@ export class CodegenGo {
         this.result = this.result.trim()
     }
 
-    addStruct(struct:string){
-        for(let i = this.structs.length - 1; i >= 0; i --) {
-            if(this.structs[i] === struct) {
+    addStruct(struct: string) {
+        for (let i = this.structs.length - 1; i >= 0; i--) {
+            if (this.structs[i] === struct) {
                 return
             }
         }
@@ -320,7 +320,7 @@ export class CodegenGo {
             }
 
             if (indent.length) {
-                result += `${indent}} ${this.getTag(node,upNode)}\n`
+                result += `${indent}} ${this.getTag(node, upNode)}\n`
             } else {
                 result += `${indent}}\n`
             }
@@ -341,7 +341,7 @@ export class CodegenGo {
             }
             if (isStruct) {
                 if (indent.length) {
-                    result += `${indent}} ${this.getTag(node,upNode)}\n`
+                    result += `${indent}} ${this.getTag(node, upNode)}\n`
                 } else {
                     result += `${indent}}\n`
                 }

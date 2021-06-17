@@ -49,7 +49,7 @@ onMounted(() => {
 
 // 源码
 const repoFn = () => {
-	window.open('https://github.com/misakafs/json-to-go', '_blank')
+    window.open('https://github.com/misakafs/json-to-go', '_blank')
 }
 
 // 清空

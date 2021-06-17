@@ -21,9 +21,7 @@
     </Panel>
     <!--  关于的弹框  -->
     <Dialog header="关于" v-model:visible="displayAboutDialog" :breakpoints="{ '960px': '75vw' }" :style="{ width: '50vw' }" :modal="true">
-        <p>
-	        基本功能已完善
-        </p>
+        <p>基本功能已完善</p>
     </Dialog>
 
     <!--  右侧栏  -->
@@ -37,10 +35,10 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, watchEffect, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import Clipboard from 'clipboard'
 import { useEditor, Mode } from '../editor'
-import { useRightEditorEvent, onLeftEditorTransform, setCodegenStrategy } from '../bus/event'
+import { useRightEditorEvent, onLeftEditorTransform } from '../bus/event'
 
 // 引入组件
 import golang from './golang.vue'
@@ -57,11 +55,11 @@ const aboutFn = () => {
 // 只读/编辑
 const readonly = ref(false)
 const readonlyWord = ref('编辑')
-const readonlyIcon = ref('pi-eye-slash')
+const readonlyIcon = ref('pi-pencil')
 const switchReadonly = () => {
     readonly.value = !readonly.value
     readonlyWord.value = readonly.value ? '只读' : '编辑'
-    readonlyIcon.value = readonly.value ? 'pi-eye' : 'pi-eye-slash'
+    readonlyIcon.value = readonly.value ? 'pi-eye' : 'pi-pencil'
     editor.value.setReadOnly(readonly.value)
 }
 
