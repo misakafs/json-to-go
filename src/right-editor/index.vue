@@ -21,15 +21,14 @@
     </Panel>
     <!--  关于的弹框  -->
     <Dialog header="关于" v-model:visible="displayAboutDialog" :breakpoints="{ '960px': '75vw' }" :style="{ width: '50vw' }" :modal="true">
-        <p></p>
+        <p>
+	        基本功能已完善
+        </p>
     </Dialog>
 
     <!--  右侧栏  -->
     <Sidebar v-model:visible="displayRightSider" :baseZIndex="1000" position="right" class="p-sidebar-lg" :showCloseIcon="false">
         <Panel header="设置">
-            <CascadeSelect @change="change" v-model="devLang" :options="devLangs" :optionGroupChildren="[]" optionLabel="name" placeholder="选择一门开发语言" />
-            <br />
-            <br />
             <keep-alive>
                 <component :is="golang"></component>
             </keep-alive>
@@ -88,20 +87,6 @@ const settingFn = () => {
 
 // --- 选择开发语言
 const devLang = ref({ name: 'Golang', code: 1 })
-const devLangs = ref([
-    {
-        name: 'Json',
-        code: 0
-    },
-    {
-        name: 'Golang',
-        code: 1
-    },
-    {
-        name: 'Yaml',
-        code: 2
-    }
-])
 const change = () => {
     setCodegenStrategy(devLang.value.code)
 }

@@ -1,8 +1,8 @@
 <template>
     <Panel header="JSON">
         <template #icons>
-            <button class="p-panel-header-icon p-link p-mr-4" v-tooltip.bottom="'关于'" @click="aboutFn">
-                <span class="pi pi-question"></span>
+            <button class="p-panel-header-icon p-link p-mr-4" v-tooltip.bottom="'源码'" @click="repoFn">
+                <span class="pi pi-github"></span>
             </button>
             <button class="p-panel-header-icon p-link p-mr-4" v-tooltip.bottom="'清空'" @click="cleanFn">
                 <span class="pi pi-trash"></span>
@@ -20,8 +20,6 @@
         </template>
         <pre id="leftEditor" class="editor"></pre>
     </Panel>
-    <!--  关于的弹框  -->
-    <Dialog header="关于" v-model:visible="displayAboutDialog" :breakpoints="{ '960px': '75vw' }" :style="{ width: '50vw' }" :modal="true"> </Dialog>
 </template>
 
 <script lang="ts" setup>
@@ -49,10 +47,9 @@ onMounted(() => {
     )
 })
 
-// 关于
-const displayAboutDialog = ref(false)
-const aboutFn = () => {
-    displayAboutDialog.value = true
+// 源码
+const repoFn = () => {
+	window.open('https://github.com/misakafs/json-to-go', '_blank')
 }
 
 // 清空
