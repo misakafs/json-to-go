@@ -12,6 +12,13 @@ enum GoType {
     STRUCT = 'struct'
 }
 
+let seq = 1
+
+// 匹配非字母开头
+const regex = new RegExp(/^[a-zA-Z]{1}[\w-]*$/)
+// 匹配数字
+const regexD = new RegExp(/^(\-|\+)?\d+(\.\d+)?$/)
+
 // go节点
 class GoNode {
     // 记录原始的名字
@@ -33,11 +40,30 @@ class GoNode {
 
     constructor(name: string) {
         this.origin = name
-        this.name = getName(1, name)
+        this.name = getName(1, this._handlerName(name))
         this.allowEmpty = false
         this.repeatTimes = 0
         this.childNameMaxLength = 0
         this.childKindMaxLength = 0
+    }
+
+    // 处理一些特殊的 不规范的key
+    _handlerName(name: string):string{
+        name = name.trim()
+        if (name === '') {
+            name = 'EmptyField' + seq
+            seq ++
+        }
+        // 不符合规范的名字
+        if (!regex.test(name)) {
+            if (regexD.test(name)) {
+                name = 'NumberField' + seq
+            } else {
+                name = 'StringField' + seq
+            }
+            seq ++
+        }
+        return name
     }
 
     addNode(goNode: GoNode) {
@@ -51,17 +77,14 @@ class GoNode {
         if (goNode.kind) {
             let kind = goNode.kind
             const index = goNode.kind.lastIndexOf('[]')
-            let k = ''
+            let k = goNode.kind
             if (index > -1) {
                 k = goNode.kind.slice(index + 2)
-            } else {
-                k = goNode.kind
             }
             if (BaseTypes.indexOf(k) === -1) {
+                kind = goNode.name
                 if (index > -1) {
                     kind = kind.slice(0, index + 2) + goNode.name
-                } else {
-                    kind = goNode.name
                 }
             }
 
@@ -117,6 +140,7 @@ export class CodegenGo {
     structs: string[]
 
     constructor(node: Node, opt?: Option) {
+        seq = 1
         this.result = ''
         this.structs = new Array()
         this.opt = Object.assign({}, default_opt, this.opt)
@@ -240,7 +264,7 @@ export class CodegenGo {
         let tags: string[] = new Array()
         for (let i = 0; i < this.opt.tags.length; i++) {
             const tag = this.opt.tags[i]
-            let s = `${tag.name}:"${getName(tag.named, node.name)}`
+            let s = `${tag.name}:"${getName(tag.named, node.origin)}`
             if (tag.omitempty) {
                 s += ',omitempty'
             } else {
@@ -282,10 +306,15 @@ export class CodegenGo {
             if (node.childs) {
                 const length = node.childs?.length ?? 0
                 for (let i = 0; i < length; i++) {
-                    result += this.codegen(node.childs[i], node, '    ')
+                    result += this.codegen(node.childs[i], node, '    ' + indent)
                 }
             }
-            result += `${indent}}\n`
+
+            if (indent.length) {
+                result += `${indent}} ${this.getTag(node,upNode)}\n`
+            } else {
+                result += `${indent}}\n`
+            }
         }
         if (node.kind?.indexOf('[]') !== -1) {
             const isStruct = (node.kind?.indexOf('struct') ?? -1) > -1
@@ -302,7 +331,11 @@ export class CodegenGo {
                 }
             }
             if (isStruct) {
-                result += `${indent}}\n`
+                if (indent.length) {
+                    result += `${indent}} ${this.getTag(node,upNode)}\n`
+                } else {
+                    result += `${indent}}\n`
+                }
             }
         }
         return result
