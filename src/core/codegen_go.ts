@@ -40,7 +40,7 @@ class GoNode {
 
     constructor(name: string) {
         this.origin = name
-        this.name = getName(1, this._handlerName(name))
+        this.name = getName(2, this._handlerName(name))
         this.allowEmpty = false
         this.repeatTimes = 0
         this.childNameMaxLength = 0
@@ -126,7 +126,7 @@ const default_opt = {
     tags: [
         {
             name: 'json',
-            named: 0,
+            named: 1,
             omitempty: false
         }
     ]

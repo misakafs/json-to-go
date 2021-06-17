@@ -6,25 +6,29 @@ export interface namedFn {
 
 // 命名方式
 export const namedWays = {
-    // abcDef
+    // 原样返回
     0: function (s: string): string {
+        return s
+    },
+    // abcDef
+    1: function (s: string): string {
         return humps.camelize(s)
     },
     // AbcDef
-    1: function (s: string): string {
+    2: function (s: string): string {
         return humps.pascalize(s)
     },
     // abc_def
-    2: function (s: string): string {
+    3: function (s: string): string {
         return humps.decamelize(s, { separator: '_' })
     },
     // Abcdef
-    3: function (s: string): string {
+    4: function (s: string): string {
         s = humps.decamelize(s, { separator: '' })
         return s.replace(s[0], s[0].toUpperCase())
     },
     // abcdef
-    4: function (s: string): string {
+    5: function (s: string): string {
         return humps.decamelize(s, { separator: '' })
     }
 }
@@ -41,6 +45,8 @@ export function getName(index: number, s: string): string {
             return namedWays[3](s)
         case 4:
             return namedWays[4](s)
+        case 5:
+            return namedWays[5](s)
     }
     return s
 }
