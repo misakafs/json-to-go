@@ -54,12 +54,12 @@ const aboutFn = () => {
 
 // 只读/编辑
 const readonly = ref(false)
-const readonlyWord = ref('编辑')
-const readonlyIcon = ref('pi-pencil')
+const readonlyWord = ref('只读')
+const readonlyIcon = ref('pi-eye')
 const switchReadonly = () => {
     readonly.value = !readonly.value
-    readonlyWord.value = readonly.value ? '只读' : '编辑'
-    readonlyIcon.value = readonly.value ? 'pi-eye' : 'pi-pencil'
+    readonlyWord.value = readonly.value ? '编辑' : '只读'
+    readonlyIcon.value = readonly.value ? 'pi-pencil' : 'pi-eye'
     editor.value.setReadOnly(readonly.value)
 }
 
