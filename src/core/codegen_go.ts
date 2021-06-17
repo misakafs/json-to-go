@@ -154,6 +154,15 @@ export class CodegenGo {
         this.result = this.result.trim()
     }
 
+    addStruct(struct:string){
+        for(let i = this.structs.length - 1; i >= 0; i --) {
+            if(this.structs[i] === struct) {
+                return
+            }
+        }
+        this.structs.unshift(struct)
+    }
+
     // 生成go节点树
     gen(node: Node, upType?: NodeType, upNode?: GoNode): GoNode | any {
         let goNode: GoNode | any = null
@@ -361,7 +370,7 @@ export class CodegenGo {
                 }
             }
             r += `}\n`
-            this.structs.unshift(r)
+            this.addStruct(r)
         }
         if (node.kind && node.kind.indexOf('[]') !== -1) {
             const isStruct = (node.kind.indexOf('struct') ?? -1) > -1
@@ -386,7 +395,7 @@ export class CodegenGo {
             }
             if (isStruct) {
                 r += `}\n`
-                this.structs.unshift(r)
+                this.addStruct(r)
             }
         }
         return result
