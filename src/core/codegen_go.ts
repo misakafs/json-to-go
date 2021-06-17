@@ -14,6 +14,9 @@ enum GoType {
 
 // go节点
 class GoNode {
+    // 记录原始的名字
+    origin: string
+    // 大驼峰命名的名字
     name: string
     kind?: string
     tag?: string
@@ -29,7 +32,8 @@ class GoNode {
     childs?: GoNode[]
 
     constructor(name: string) {
-        this.name = name
+        this.origin = name
+        this.name = getName(1, name)
         this.allowEmpty = false
         this.repeatTimes = 0
         this.childNameMaxLength = 0
@@ -43,9 +47,29 @@ class GoNode {
         if (goNode.name.length > this.childNameMaxLength) {
             this.childNameMaxLength = goNode.name.length
         }
-        if ((goNode.kind?.length ?? 0) > this.childKindMaxLength) {
-            this.childKindMaxLength = goNode.kind?.length ?? 0
+
+        if (goNode.kind) {
+            let kind = goNode.kind
+            const index = goNode.kind.lastIndexOf('[]')
+            let k = ''
+            if (index > -1) {
+                k = goNode.kind.slice(index + 2)
+            } else {
+                k = goNode.kind
+            }
+            if (BaseTypes.indexOf(k) === -1) {
+                if (index > -1) {
+                    kind = kind.slice(0, index + 2) + goNode.name
+                } else {
+                    kind = goNode.name
+                }
+            }
+
+            if (kind.length > this.childKindMaxLength) {
+                this.childKindMaxLength = kind.length
+            }
         }
+
         for (let i = this.childs.length - 1; i >= 0; i--) {
             if (goNode.name === this.childs[i]?.name) {
                 this.childs[i] = goNode
@@ -65,8 +89,8 @@ const BaseTypes = [GoType.BOOL.toString(), GoType.INT.toString(), GoType.FLOAT.t
 
 // tag
 interface Tag {
-    name: string   // 名字
-    named: number  // 命名方式
+    name: string // 名字
+    named: number // 命名方式
     omitempty: boolean // 是否忽略该字段
 }
 
@@ -76,11 +100,14 @@ const default_opt = {
     // 是否内联
     inline: false,
     // tag
-    tags: [{
-        name: 'json',
-        named: 0,
-        omitempty: false
-    }]
+    tags: [
+        {
+            name: 'json',
+            named: 0,
+            omitempty: false
+        }
+    ]
+    // tags: []
 }
 
 export class CodegenGo {
@@ -109,6 +136,9 @@ export class CodegenGo {
         switch (node.nodeType) {
             case NodeType.BASE:
                 if (upType === NodeType.ARRAY) {
+                    return null
+                }
+                if (!node.getToken()) {
                     return null
                 }
                 goNode = new GoNode(node?.key?.value ?? 'field')
@@ -170,6 +200,11 @@ export class CodegenGo {
                 for (let i = 1; i < node.size; i++) {
                     let k = this.getKind(node.getNodes()[i])
                     if (k !== kind) {
+                        // 如果都是数字类型提升到float类型
+                        if ((k === GoType.INT && kind === GoType.FLOAT) || (kind === GoType.INT && k === GoType.FLOAT)) {
+                            kind = GoType.FLOAT
+                            continue
+                        }
                         return '[]' + GoType.INTERFACE
                     }
                 }
@@ -197,18 +232,38 @@ export class CodegenGo {
         return GoType.INTERFACE
     }
 
-    // 生成代码
-    codegen(node: GoNode, upNode:GoEmpty = null, indent:string = ''): string {
-        let padNameNumber = 0
-        let padKindNumber = 0
-        if (upNode) {
-            padNameNumber = upNode.childNameMaxLength
-            padKindNumber = upNode.childKindMaxLength
+    // 获取tag
+    getTag(node: GoNode, upNode: GoEmpty = null): string {
+        if (!this.opt?.tags?.length) {
+            return ''
         }
+        let tags: string[] = new Array()
+        for (let i = 0; i < this.opt.tags.length; i++) {
+            const tag = this.opt.tags[i]
+            let s = `${tag.name}:"${getName(tag.named, node.name)}`
+            if (tag.omitempty) {
+                s += ',omitempty'
+            } else {
+                if (upNode && upNode.allowEmpty && node.repeatTimes === 0) {
+                    s += ',omitempty'
+                }
+            }
+            s += '"'
+            tags.push(s)
+        }
+        const s = tags.join(' ')
+        return '`' + s + '`'
+    }
+
+    // 生成代码
+    codegen(node: GoNode, upNode: GoEmpty = null, indent: string = ''): string {
+        const padNameNumber = upNode?.childNameMaxLength ?? 0
+        const padKindNumber = upNode?.childKindMaxLength ?? 0
+
         let result = ''
 
         if (node.kind && BaseTypes.indexOf(node.kind) !== -1) {
-            result += `${indent}${getName(1,node.name).padEnd(padNameNumber)} ${node.kind.padEnd(padKindNumber)}\n`
+            result += `${indent}${node.name.padEnd(padNameNumber)} ${node.kind.padEnd(padKindNumber)} ${this.getTag(node, upNode)}\n`
         }
 
         if (this.opt?.inline) {
@@ -220,7 +275,7 @@ export class CodegenGo {
     }
 
     // 生成内联
-    codegen_inline(node: GoNode, upNode:GoEmpty = null, indent:string = ''): string{
+    codegen_inline(node: GoNode, upNode: GoEmpty = null, indent: string = ''): string {
         let result = ''
         if (node.kind === GoType.STRUCT) {
             result += `${indent.length ? indent : 'type '}${node.name} struct {\n`
@@ -243,7 +298,7 @@ export class CodegenGo {
             if (isStruct && node.childs) {
                 const length = node.childs?.length ?? 0
                 for (let i = 0; i < length; i++) {
-                    result += this.codegen(node.childs[i], node,'    ' + indent)
+                    result += this.codegen(node.childs[i], node, '    ' + indent)
                 }
             }
             if (isStruct) {
@@ -254,44 +309,46 @@ export class CodegenGo {
     }
 
     // 非内联
-    codegen_noinline(node: GoNode, upNode:GoEmpty = null, indent:string = ''): string{
-        let padNameNumber = 0
-        let padKindNumber = 0
-        if (upNode) {
-            padNameNumber = upNode.childNameMaxLength
-            padKindNumber = upNode.childKindMaxLength
-        }
+    codegen_noinline(node: GoNode, upNode: GoEmpty = null, indent: string = ''): string {
+        const padNameNumber = upNode?.childNameMaxLength ?? 0
+        const padKindNumber = upNode?.childKindMaxLength ?? 0
+
         let result = ''
         if (node.kind === GoType.STRUCT) {
             let r = ''
             if (upNode) {
-                result += `${indent.length ? indent : 'type '}${getName(1, node.name).padEnd(padNameNumber)} ${getName(1, node.name).padEnd(padKindNumber)}\n`
+                result += `${indent.length ? indent : 'type '}${node.name.padEnd(padNameNumber)} ${node.name.padEnd(padKindNumber)} ${this.getTag(node, upNode)}\n`
             }
-            r += `type ${getName(1, node.name)} struct {\n`
+            r += `type ${node.name} struct {\n`
 
             if (node.childs) {
-                const length = node.childs?.length ?? 0
+                const length = node.childs.length ?? 0
                 for (let i = 0; i < length; i++) {
-                    r += this.codegen(node.childs[i], node,'    ')
+                    r += this.codegen(node.childs[i], node, '    ')
                 }
             }
             r += `}\n`
             this.structs.unshift(r)
         }
-        if (node.kind?.indexOf('[]') !== -1) {
-            const isStruct = (node.kind?.indexOf('struct') ?? -1) > -1
+        if (node.kind && node.kind.indexOf('[]') !== -1) {
+            const isStruct = (node.kind.indexOf('struct') ?? -1) > -1
             let r = ''
             if (isStruct) {
-                r += `type ${getName(1, node.name)} ${indent.length ? 'struct' : node.kind} {\n`
-                result += `${indent}${getName(1, node.name).padEnd(padNameNumber)} ${node.kind?.replaceAll('struct','')}${getName(1, node.name)}\n`
+                r += `type ${node.name} ${indent.length ? 'struct' : node.kind} {\n`
+                const kind = node.kind.replaceAll('struct', '') + node.name
+                result += `${indent}${node.name.padEnd(padNameNumber)} ${kind.padEnd(padKindNumber)} ${this.getTag(node, upNode)}\n`
             } else {
-                result += `${indent.length ? indent : 'type '}${getName(1, node.name)} ${node.kind}\n`
+                result += `${indent.length ? indent : 'type '}${node.name.padEnd(padNameNumber)} ${node.kind.padEnd(padKindNumber)}`
+                if (indent.length) {
+                    result += ` ${this.getTag(node, upNode)}`
+                }
+                result += '\n'
             }
 
             if (isStruct && node.childs) {
-                const length = node.childs?.length ?? 0
+                const length = node.childs.length ?? 0
                 for (let i = 0; i < length; i++) {
-                    r += this.codegen(node.childs[i], node,'    ')
+                    r += this.codegen(node.childs[i], node, '    ')
                 }
             }
             if (isStruct) {
