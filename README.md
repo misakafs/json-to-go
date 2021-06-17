@@ -1,5 +1,5 @@
-# json-to-x
-将json生成其他语言的数据结构。generating data structure of other languages with JSON.
+# json-to-go
+将json生成go的数据结构。generating data structure of go languages with JSON.
 
 
 ## 参考

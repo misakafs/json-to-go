@@ -1,7 +1,7 @@
 {
-  "name": "json-to-x",
+  "name": "json-to-go",
   "version": "0.0.1",
-  "description": "generating data structure of other languages with JSON",
+  "description": "generating data structure of go languages with JSON",
   "author": "lhlyu",
   "scripts": {
     "fmt": "prettier --write .",
