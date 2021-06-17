@@ -95,6 +95,9 @@ export class Parser {
 
                 // 解析value
                 const nextToken = this.next()
+                if (!nextToken) {
+                    return
+                }
                 if (nextToken.isBasicType()) {
                     node.setValue(nextToken)
                 } else {

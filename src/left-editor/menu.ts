@@ -37,7 +37,8 @@ const demo4 = `{
         "float3": -0.2313,
         "string1": "this is string1",
         "string2": "23121",
-        "string3": "sda3242;klk3423"
+        "string3": "sda3242;klk3423",
+        "int64": 4876918452693760
     },
     "complex": {
         "object1": {

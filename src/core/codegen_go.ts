@@ -7,6 +7,7 @@ enum GoType {
     BOOL = 'bool',
     STRING = 'string',
     INT = 'int',
+    INT64 = 'int64',
     FLOAT = 'float64',
     INTERFACE = 'interface{}',
     STRUCT = 'struct'
@@ -108,7 +109,9 @@ class GoNode {
 
 type GoEmpty = GoNode | null | undefined
 
-const BaseTypes = [GoType.BOOL.toString(), GoType.INT.toString(), GoType.FLOAT.toString(), GoType.STRING.toString(), GoType.INTERFACE.toString()]
+const BaseTypes = [GoType.BOOL.toString(), GoType.INT.toString(), GoType.INT64.toString(), GoType.FLOAT.toString(), GoType.STRING.toString(), GoType.INTERFACE.toString()]
+
+const NumberTypes = [GoType.INT.toString(), GoType.INT64.toString(), GoType.FLOAT.toString()]
 
 // tag
 interface Tag {
@@ -132,6 +135,13 @@ const default_opt = {
     ]
 }
 
+const MaxFloat64 = 1.797693134862315708145274237317043567981e+308
+const SmallestNonzeroFloat64 = 4.940656458412465441765687928682213723651e-324
+const MaxInt32 = BigInt(1073741824)
+const MinInt32  = BigInt(-2147483648)
+const MaxInt64  = BigInt(4611686018427387904)
+const MinInt64  = BigInt(-9223372036854775808)
+
 export class CodegenGo {
     root?: GoNode
     opt?: Option
@@ -143,7 +153,6 @@ export class CodegenGo {
         this.result = ''
         this.structs = new Array()
         this.opt = Object.assign({}, default_opt, opt)
-        console.log('opt:', this.opt)
         const r = this.gen(node)
         if (r) {
             this.result = this.codegen(r)
@@ -234,7 +243,7 @@ export class CodegenGo {
                     let k = this.getKind(node.getNodes()[i])
                     if (k !== kind) {
                         // 如果都是数字类型提升到float类型
-                        if ((k === GoType.INT && kind === GoType.FLOAT) || (kind === GoType.INT && k === GoType.FLOAT)) {
+                        if (NumberTypes.indexOf(k) > 0 && NumberTypes.indexOf(kind) > 0) {
                             kind = GoType.FLOAT
                             continue
                         }
@@ -246,20 +255,33 @@ export class CodegenGo {
                     case GoType.BOOL:
                     case GoType.STRING:
                     case GoType.INT:
+                    case GoType.INT64:
                     case GoType.FLOAT:
                         return '[]' + kind
                     default:
                         return '[]' + this.getKind(node.getNodes()[0])
                 }
         }
+        let val = 0
         switch (node.getToken().tokenType) {
             case TokenType.BOOLEAN:
                 return GoType.BOOL
             case TokenType.STRING:
                 return GoType.STRING
             case TokenType.INTEGER:
+                val = +node.getToken().value
+                if (val > MaxInt64 || val < MinInt64) {
+                    return GoType.STRING
+                }
+                if (val > MaxInt32 || val < MinInt32) {
+                    return GoType.INT64
+                }
                 return GoType.INT
             case TokenType.FLOAT:
+                val = +node.getToken().value
+                if (val > MaxFloat64 || val < SmallestNonzeroFloat64) {
+                    return GoType.STRING
+                }
                 return GoType.FLOAT
         }
         return GoType.INTERFACE
