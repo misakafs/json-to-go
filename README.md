@@ -1,5 +1,5 @@
 # json-to-go
-将json生成go的数据结构。generating data structure of go languages with JSON.
+将json生成go的数据结构。Online tool that convert JSON to Go.
 
 
 ## 本地开发

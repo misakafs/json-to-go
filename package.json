@@ -1,7 +1,7 @@
 {
   "name": "json-to-go",
   "version": "0.0.1",
-  "description": "generating data structure of go languages with JSON",
+  "description": "Online tool that convert JSON to Go",
   "author": "lhlyu",
   "scripts": {
     "fmt": "prettier --write .",
