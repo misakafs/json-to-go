@@ -4,12 +4,10 @@ import { Parser } from './parse'
 import { Option } from './types'
 import { CodegenJson } from './codegen_json'
 import { CodegenGo } from './codegen_go'
-// import { CodegenGo } from "./codegen_go";
 
 export enum CodegenStrategy {
     JSON,
-    GOLANG,
-    YAML
+    GOLANG
 }
 
 interface Strategy {
@@ -26,17 +24,10 @@ const jsonStrategy = new JsonStrategy()
 
 class GolangStrategy implements Strategy {
     codegen(node: Node, opt?: Option): string {
-        return new CodegenGo(node).result
+        return new CodegenGo(node, opt).result
     }
 }
 const golangStrategy = new GolangStrategy()
-
-class YamlStrategy implements Strategy {
-    codegen(node: Node, opt?: Option): string {
-        return new CodegenJson(node).result
-    }
-}
-const yamlStrategy = new JsonStrategy()
 
 export class Codegen {
     private strategy!: Strategy
@@ -48,9 +39,6 @@ export class Codegen {
                 break
             case CodegenStrategy.GOLANG:
                 this.strategy = golangStrategy
-                break
-            case CodegenStrategy.YAML:
-                this.strategy = yamlStrategy
                 break
         }
     }

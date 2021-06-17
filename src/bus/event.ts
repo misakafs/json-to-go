@@ -27,6 +27,24 @@ export const setCodegenStrategyOption = (opt?: Option) => {
     if (!opt) {
         return
     }
+    if (opt?.tag?.length) {
+        console.log(opt.tag)
+        const ts = opt.tag.split(',')
+        const tags = new Array()
+        for (let i = 0; i < ts.length; i++) {
+            const arr = ts[i].split(':')
+            if(!arr[0]) {
+                continue
+            }
+            tags.push({
+                name: arr[0],
+                named: +(arr[1] ?? 1),
+                omitempty: (arr[2] ?? 'false') === 'true'
+            })
+        }
+        opt.tags = tags
+    }
+
     _setting.opt = Object.assign({}, _setting.opt, opt)
     onLeftEditorTransform()
 }

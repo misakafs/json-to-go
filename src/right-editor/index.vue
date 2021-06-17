@@ -84,10 +84,4 @@ const displayRightSider = ref(false)
 const settingFn = () => {
     displayRightSider.value = true
 }
-
-// --- 选择开发语言
-const devLang = ref({ name: 'Golang', code: 1 })
-const change = () => {
-    setCodegenStrategy(devLang.value.code)
-}
 </script>

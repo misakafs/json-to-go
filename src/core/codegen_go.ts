@@ -130,7 +130,6 @@ const default_opt = {
             omitempty: false
         }
     ]
-    // tags: []
 }
 
 export class CodegenGo {
@@ -143,7 +142,8 @@ export class CodegenGo {
         seq = 1
         this.result = ''
         this.structs = new Array()
-        this.opt = Object.assign({}, default_opt, this.opt)
+        this.opt = Object.assign({}, default_opt, opt)
+        console.log('opt:', this.opt)
         const r = this.gen(node)
         if (r) {
             this.result = this.codegen(r)

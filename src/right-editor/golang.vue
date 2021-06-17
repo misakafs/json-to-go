@@ -5,18 +5,9 @@
     </div>
     <h5>根对象名</h5>
     <InputText type="text" v-model="rootName"></InputText>
-    <h5>自定义Tag(回车确认)</h5>
-    <p>tag后面接序号可以指定命名方式</p>
-    <p>eg: json|3, form|2</p>
-    <Chips v-model="tags"></Chips>
-    <div>
-        <h6>命名方式</h6>
-        <p>0. abcDef - 默认</p>
-        <p>1. AbcDef</p>
-        <p>2. abc_def</p>
-        <p>3. Abcdef</p>
-        <p>4. abcdef</p>
-    </div>
+    <h5>自定义Tag <a href="https://github.com/misakafs/json-to-go/blob/main/README.md#%E8%87%AA%E5%AE%9A%E4%B9%89tag" target="_blank">使用教程</a></h5>
+	<InputText type="text" v-model="tag"></InputText>
+
 </template>
 
 <script lang="ts" setup>
@@ -28,22 +19,22 @@ import cache from '../cache'
 const inline = ref(false)
 
 // 自定义tag
-const tags = ref(['json'])
+const tag = ref('json:1:false')
 
 // 根对象名
-const rootName = ref('Root')
+const rootName = ref('RootObject')
 
 const emit = () => {
     const opt = {
         inline: inline.value,
-        tags: tags.value,
+        tag: tag.value,
         rootName: rootName.value
     }
     cache.set('opt.golang', opt)
     setCodegenStrategyOption(opt)
 }
 
-watch([inline, tags, rootName], () => {
+watch([inline, tag, rootName], () => {
     emit()
 })
 
@@ -51,7 +42,7 @@ onMounted(() => {
     const opt = cache.get('opt.golang')
     if (opt) {
         inline.value = opt.inline
-        tags.value = opt.tags
+	    tag.value = opt.tag
         rootName.value = opt.rootName
     }
     emit()

@@ -10,7 +10,7 @@ function run(s: string): string {
     // console.log(scan.tokens)
     // 将tokens解析成树结构
     const parser = new Parser(scan.tokens)
-    // console.log(JSON.stringify(parser.root, null, 2))
+    console.log(JSON.stringify(parser.root, null, 2))
     // 生成json字符串
     // const codegen = new CodegenJson(parser.root)
     const codegen = new CodegenGo(parser.root)
@@ -35,7 +35,7 @@ function run(s: string): string {
 // const s = `{"a":1,"b":{"c":true,"d":null,"e":{"f":"xxx"}}}`
 // const s = `{a:132,b:true,a:1.23,b:null,c:xxwda,f:{g:sda},b:0}`
 // const s = `[a b c {c:false} true null]`
-const s = `{"basic":{"null":null,"true":true,"false":false,"integer0":0,"integer1":23123,"integer2":-2434234,"float0":0.1232,"float1":231.34234,"float2":-31.1231,"float3":-0.2313,"string1":"this is string1","string2":"23121","string3":"sda3242;klk3423"},"complex":{"object1":{"key1":123,"key2":-1.2,"key3":true,"key4":false,"key5":null,"key6":"value","object2":{"arr":["1","2","3"],"arr2":[{"arr2_key1":-123.231,"arr2_key2":"2313","arr2_key3":"[3121]"}]}}},"array1":[1,2,3,4],"array2":[1.342,4.342,-123.34,34,0,-313],"array3":["aaa","bbb","ccc","dddd"],"array4":[true,null,231,"sd32",23.343],"array5":[[1,2,3],[4,5,6]],"array6":[["aaa","bbb"],["ccc"]],"array7":[[true,null],[0,false,null,3.4,-23]],"array8":[[{"key1":123,"key2":"sdad","key3":213.4}]],"array9":[[[{"key1":123,"key2":"sdad","key3":213.4}]]]}`
+// const s = `{"basic":{"null":null,"true":true,"false":false,"integer0":0,"integer1":23123,"integer2":-2434234,"float0":0.1232,"float1":231.34234,"float2":-31.1231,"float3":-0.2313,"string1":"this is string1","string2":"23121","string3":"sda3242;klk3423"},"complex":{"object1":{"key1":123,"key2":-1.2,"key3":true,"key4":false,"key5":null,"key6":"value","object2":{"arr":["1","2","3"],"arr2":[{"arr2_key1":-123.231,"arr2_key2":"2313","arr2_key3":"[3121]"}]}}},"array1":[1,2,3,4],"array2":[1.342,4.342,-123.34,34,0,-313],"array3":["aaa","bbb","ccc","dddd"],"array4":[true,null,231,"sd32",23.343],"array5":[[1,2,3],[4,5,6]],"array6":[["aaa","bbb"],["ccc"]],"array7":[[true,null],[0,false,null,3.4,-23]],"array8":[[{"key1":123,"key2":"sdad","key3":213.4}]],"array9":[[[{"key1":123,"key2":"sdad","key3":213.4}]]]}`
 // const s = `{"null":null,"true":true,"false":false,"integer0":0,"integer1":23123,"integer2":-2434234,"float0":0.1232,"float1":231.34234,"float2":-31.1231,"float3":-0.2313,"string1":"this is string1","string2":"23121","string3":"sda3242;klk3423"}`
-
+const s = `12312-asda:123`
 console.log(run(s))
