@@ -10,9 +10,10 @@ export default defineConfig({
     base: base,
     build: {
         rollupOptions: {
-            external: ['ace-builds'],
+            external: ['ace-builds','vue'],
             plugins: [
                 externalGlobals({
+                    'vue': 'Vue',
                     'ace-builds': 'ace'
                 })
             ]
