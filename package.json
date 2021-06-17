@@ -7,7 +7,7 @@
     "fmt": "prettier --write .",
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "page": "vue-tsc --noEmit && vite build --mode github --outDir ./docs",
+    "page": "vue-tsc --noEmit && vite build --outDir ./docs",
     "serve": "vite preview",
     "test": "jest",
     "eg": "ts-node src/core/run.ts"
