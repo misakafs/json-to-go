@@ -369,7 +369,7 @@ export class CodegenGo {
                 }
             } else {
                 if (indent.length) {
-                    result += `${indent}${node.name.padEnd(padNameNumber)} ${node.kind} ${this.getTag(node, upNode)}\n`
+                    result += `${indent}${node.name.padEnd(padNameNumber)} ${node.kind?.padEnd(padKindNumber)} ${this.getTag(node, upNode)}\n`
                 } else {
                     result += `type ${node.name} ${node.kind}`
                     if (length > 0) {
