@@ -26,7 +26,7 @@ const rootName = ref('RootObject')
 const emit = () => {
     const opt = {
         inline: inline.value,
-        tag: tag.value,
+        tag: tag.value.trim(),
         rootName: rootName.value
     }
     cache.set('opt.golang', opt)

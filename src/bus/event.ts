@@ -28,7 +28,6 @@ export const setCodegenStrategyOption = (opt?: Option) => {
         return
     }
     if (opt?.tag?.length) {
-        console.log(opt.tag)
         const ts = opt.tag.split(',')
         const tags = new Array()
         for (let i = 0; i < ts.length; i++) {
@@ -43,6 +42,8 @@ export const setCodegenStrategyOption = (opt?: Option) => {
             })
         }
         opt.tags = tags
+    } else {
+        opt.tags = []
     }
 
     _setting.opt = Object.assign({}, _setting.opt, opt)
