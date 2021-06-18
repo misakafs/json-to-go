@@ -43,7 +43,7 @@ onMounted(() => {
         'change',
         debounce(function () {
             transformFn()
-        }, 500)
+        }, 300)
     )
 })
 
@@ -69,9 +69,6 @@ onMounted(() => {
 
 // 转换
 const transformFn = () => {
-    setCodegenStrategyOption({
-        format: true
-    })
     onLeftEditorTransform()
 }
 </script>

@@ -27,21 +27,23 @@
     <!--  右侧栏  -->
     <Sidebar v-model:visible="displayRightSider" :baseZIndex="1000" position="right" class="p-sidebar-lg" :showCloseIcon="false">
         <Panel header="设置">
-            <keep-alive>
-                <component :is="golang"></component>
-            </keep-alive>
+            <div class="p-field-checkbox">
+                <Checkbox id="binary" v-model="inline" :binary="true" />
+                <label for="binary"> 是否内联类型</label>
+            </div>
+            <h5>根对象名</h5>
+            <InputText type="text" v-model="rootName"></InputText>
+            <h5>自定义Tag <a href="https://github.com/misakafs/json-to-go/blob/main/README.md#%E8%87%AA%E5%AE%9A%E4%B9%89tag" target="_blank">使用教程</a></h5>
+            <InputText type="text" v-model="tag"></InputText>
         </Panel>
     </Sidebar>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, watch, ref } from 'vue'
 import Clipboard from 'clipboard'
 import { useEditor, Mode } from '../editor'
-import { useRightEditorEvent, onLeftEditorTransform } from '../bus/event'
-
-// 引入组件
-import golang from './golang.vue'
+import { useRightEditorEvent, setCodegenStrategyOption } from '../bus/event'
 
 const { editor } = useEditor('rightEditor', Mode.go)
 useRightEditorEvent(editor)
@@ -65,7 +67,7 @@ const switchReadonly = () => {
 
 // 刷新
 const refreshFn = () => {
-    onLeftEditorTransform()
+    transform()
 }
 
 // 复制
@@ -82,4 +84,29 @@ const displayRightSider = ref(false)
 const settingFn = () => {
     displayRightSider.value = true
 }
+
+// 是否内联类型定义
+const inline = ref(false)
+
+// 自定义tag
+const tag = ref('json:1:false')
+
+// 根对象名
+const rootName = ref('RootObject')
+
+// 转换
+const transform = () => {
+    setCodegenStrategyOption({
+        inline: inline.value,
+        tag: tag.value.trim(),
+        rootName: rootName.value
+    })
+}
+
+watch([inline, tag, rootName], () => {
+    transform()
+})
+onMounted(() => {
+    transform()
+})
 </script>

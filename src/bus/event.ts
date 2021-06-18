@@ -6,22 +6,7 @@ import { Ace } from 'ace-builds'
 import { Codegen, CodegenStrategy } from '../core/strategy'
 import { Option } from '../core/types'
 
-// 配置
-interface ISetting {
-    // 生成策略
-    codegenStrategy: CodegenStrategy
-    // 其他配置
-    opt?: Option
-}
-const _setting: ISetting = {
-    codegenStrategy: CodegenStrategy.GOLANG
-}
-
-// 设置策略
-export const setCodegenStrategy = (val: number) => {
-    _setting.codegenStrategy = val
-    onLeftEditorTransform()
-}
+let $opt: Option
 
 export const setCodegenStrategyOption = (opt?: Option) => {
     if (!opt) {
@@ -46,7 +31,8 @@ export const setCodegenStrategyOption = (opt?: Option) => {
         opt.tags = []
     }
 
-    _setting.opt = Object.assign({}, _setting.opt, opt)
+    $opt = opt
+
     onLeftEditorTransform()
 }
 
@@ -107,7 +93,7 @@ export function useLeftEditorEvent(editor: Ref<Ace.Editor>) {
     })
 
     bus.on(LEFT_EDITOR_TRANSFORM, () => {
-        const s = cg.do(_setting.codegenStrategy, editor.value.getValue(), _setting.opt)
+        const s = cg.do(CodegenStrategy.GOLANG, editor.value.getValue(), $opt)
         setRightEditorValue(s)
     })
 }

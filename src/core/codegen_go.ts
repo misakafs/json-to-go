@@ -135,12 +135,12 @@ const default_opt = {
     ]
 }
 
-const MaxFloat64 = 1.797693134862315708145274237317043567981e+308
+const MaxFloat64 = 1.797693134862315708145274237317043567981e308
 const SmallestNonzeroFloat64 = 4.940656458412465441765687928682213723651e-324
 const MaxInt32 = BigInt(1073741824)
-const MinInt32  = BigInt(-2147483648)
-const MaxInt64  = BigInt(4611686018427387904)
-const MinInt64  = BigInt(-9223372036854775808)
+const MinInt32 = BigInt(-2147483648)
+const MaxInt64 = BigInt(4611686018427387904)
+const MinInt64 = BigInt(-9223372036854775808)
 
 export class CodegenGo {
     root?: GoNode
@@ -334,9 +334,15 @@ export class CodegenGo {
 
     // 生成内联
     codegen_inline(node: GoNode, upNode: GoEmpty = null, indent: string = ''): string {
+        const padNameNumber = upNode?.childNameMaxLength ?? 0
+        const padKindNumber = upNode?.childKindMaxLength ?? 0
         let result = ''
         if (node.kind === GoType.STRUCT) {
-            result += `${indent.length ? indent : 'type '}${node.name} struct {\n`
+            if (indent.length) {
+                result += `${indent}${node.name.padEnd(padNameNumber)} ${node.kind} {\n`
+            } else {
+                result += `type ${node.name} ${node.kind} {\n`
+            }
             if (node.childs) {
                 const length = node.childs?.length ?? 0
                 for (let i = 0; i < length; i++) {
@@ -352,11 +358,18 @@ export class CodegenGo {
         }
         if (node.kind?.indexOf('[]') !== -1) {
             const isStruct = (node.kind?.indexOf('struct') ?? -1) > -1
-            result += `${indent.length ? indent : 'type '}${node.name} ${node.kind}`
             if (isStruct) {
-                result += ` {\n`
+                if (indent.length) {
+                    result += `${indent}${node.name.padEnd(padNameNumber)} ${node.kind} {\n`
+                } else {
+                    result += `type ${node.name} ${node.kind} {\n`
+                }
             } else {
-                result += `\n`
+                if (indent.length) {
+                    result += `${indent}${node.name.padEnd(padNameNumber)} ${node.kind?.padEnd(padKindNumber)} ${this.getTag(node, upNode)}\n`
+                } else {
+                    result += `type ${node.name} ${node.kind} {\n`
+                }
             }
             if (isStruct && node.childs) {
                 const length = node.childs?.length ?? 0
