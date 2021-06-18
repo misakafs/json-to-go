@@ -67,7 +67,7 @@ class GoNode {
         return name
     }
 
-    addNode(goNode: GoNode) {
+    addNode(goNode: GoNode, opt?: Option) {
         if (!this.childs) {
             this.childs = new Array()
         }
@@ -82,10 +82,12 @@ class GoNode {
             if (index > -1) {
                 k = goNode.kind.slice(index + 2)
             }
-            if (BaseTypes.indexOf(k) === -1) {
-                kind = goNode.name
-                if (index > -1) {
-                    kind = kind.slice(0, index + 2) + goNode.name
+            if (opt?.inline === false) {
+                if (BaseTypes.indexOf(k) === -1) {
+                    kind = goNode.name
+                    if (index > -1) {
+                        kind = kind.slice(0, index + 2) + goNode.name
+                    }
                 }
             }
 
@@ -195,10 +197,10 @@ export class CodegenGo {
                     const gn = this.gen(node.getNodes()[i], NodeType.ARRAY, goNode ?? upNode)
                     if (gn) {
                         if (goNode) {
-                            goNode?.addNode(gn)
+                            goNode?.addNode(gn, this.opt)
                         } else {
                             if (upNode) {
-                                upNode.addNode(gn)
+                                upNode.addNode(gn, this.opt)
                             }
                         }
                     }
@@ -213,12 +215,12 @@ export class CodegenGo {
                 for (let i = 0; i < node.size; i++) {
                     const gn = this.gen(node.getNodes()[i], NodeType.OBJECT)
                     if (gn) {
-                        goNode.addNode(gn)
+                        goNode.addNode(gn, this.opt)
                     }
                 }
                 if (upType === NodeType.ARRAY && upNode) {
                     for (let i = 0; i < goNode.childs.length; i++) {
-                        upNode.addNode(goNode.childs[i])
+                        upNode.addNode(goNode.childs[i], this.opt)
                     }
                     return null
                 }
@@ -358,6 +360,7 @@ export class CodegenGo {
         }
         if (node.kind?.indexOf('[]') !== -1) {
             const isStruct = (node.kind?.indexOf('struct') ?? -1) > -1
+            const length = node.childs?.length ?? 0
             if (isStruct) {
                 if (indent.length) {
                     result += `${indent}${node.name.padEnd(padNameNumber)} ${node.kind} {\n`
@@ -366,9 +369,12 @@ export class CodegenGo {
                 }
             } else {
                 if (indent.length) {
-                    result += `${indent}${node.name.padEnd(padNameNumber)} ${node.kind?.padEnd(padKindNumber)} ${this.getTag(node, upNode)}\n`
+                    result += `${indent}${node.name.padEnd(padNameNumber)} ${node.kind} ${this.getTag(node, upNode)}\n`
                 } else {
-                    result += `type ${node.name} ${node.kind} {\n`
+                    result += `type ${node.name} ${node.kind}`
+                    if (length > 0) {
+                        result += ` {\n`
+                    }
                 }
             }
             if (isStruct && node.childs) {
@@ -381,7 +387,9 @@ export class CodegenGo {
                 if (indent.length) {
                     result += `${indent}} ${this.getTag(node, upNode)}\n`
                 } else {
-                    result += `${indent}}\n`
+                    if (length > 0) {
+                        result += `${indent}}\n`
+                    }
                 }
             }
         }
