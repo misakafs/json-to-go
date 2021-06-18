@@ -245,7 +245,7 @@ export class CodegenGo {
                     let k = this.getKind(node.getNodes()[i])
                     if (k !== kind) {
                         // 如果都是数字类型提升到float类型
-                        if (NumberTypes.indexOf(k) > 0 && NumberTypes.indexOf(kind) > 0) {
+                        if (NumberTypes.indexOf(k) > -1 && NumberTypes.indexOf(kind) > -1) {
                             kind = GoType.FLOAT
                             continue
                         }
