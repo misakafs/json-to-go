@@ -270,8 +270,11 @@ export class CodegenGo {
                 return GoType.STRING
             case TokenType.INTEGER:
                 val = +node.getToken().value
-                if (val > MaxInt64 || val < MinInt64) {
+                if (val > MaxFloat64 || val < SmallestNonzeroFloat64) {
                     return GoType.STRING
+                }
+                if (val > MaxInt64 || val < MinInt64) {
+                    return GoType.FLOAT
                 }
                 if (val > MaxInt32 || val < MinInt32) {
                     return GoType.INT64
