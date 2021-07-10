@@ -5,11 +5,11 @@
   "author": "lhlyu",
   "scripts": {
     "fmt": "prettier --write .",
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vue-tsc --noEmit && vite build",
     "gh": "vue-tsc --noEmit && cross-env MODE=gh vite build --outDir ./docs",
     "vercel": "vue-tsc --noEmit && vite build",
-    "serve": "vite preview",
+    "serve": "vite preview --host",
     "test": "jest",
     "eg": "ts-node src/core/run.ts"
   },
