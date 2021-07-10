@@ -7,7 +7,7 @@ const numerics = ['.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 // 转义符
 const escapes = ['"', '']
 // 数字结尾
-const numberEnds = [' ',',','\n','\r','\t','}',']']
+const numberEnds = [' ', ',', '\n', '\r', '\t', '}', ']']
 
 export class Scanner {
     tokens: Token[]
@@ -136,7 +136,7 @@ export class Scanner {
             i++
         }
         while (!this.finish(i)) {
-            if (isQuote && this.raw[i] == "\\") {
+            if (isQuote && this.raw[i] == '\\') {
                 i += 2
                 continue
             }
@@ -181,7 +181,7 @@ export class Scanner {
             }
             i++
         }
-        if (!this.finish(i) && numberEnds.indexOf(this.raw[i]) === -1){
+        if (!this.finish(i) && numberEnds.indexOf(this.raw[i]) === -1) {
             return null
         }
         const value = this.raw.slice(this.index, i)

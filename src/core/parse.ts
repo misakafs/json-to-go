@@ -132,7 +132,7 @@ export class Parser {
         }
     }
 
-    skip():boolean {
+    skip(): boolean {
         while (this.index < this.size) {
             switch (this.tokens[this.index].tokenType) {
                 case TokenType.SEP_COMMA:
