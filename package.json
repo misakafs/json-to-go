@@ -7,7 +7,8 @@
     "fmt": "prettier --write .",
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "page": "vue-tsc --noEmit && vite build --outDir ./docs",
+    "gh": "vue-tsc --noEmit && cross-env MODE=gh vite build --outDir ./docs",
+    "vercel": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
     "test": "jest",
     "eg": "ts-node src/core/run.ts"
@@ -33,6 +34,7 @@
     "@vitejs/plugin-vue": "^1.2.2",
     "@vue/compiler-sfc": "^3.0.11",
     "autoprefixer": "^10.2.5",
+    "cross-env": "^7.0.3",
     "jest": "^27.0.4",
     "postcss": "^8.2.15",
     "postcss-loader": "^5.3.0",

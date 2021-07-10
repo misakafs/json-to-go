@@ -168,3 +168,18 @@ test('测试注释-2', () => {
     }`
     expect(run(s)).toBe(`{"a":123,"b":"xxx","c":[true,23123,0]}`)
 })
+
+test('测试注释-3', () => {
+    const s = `a:1//haha`
+    expect(run(s)).toBe(`{"a":1}`)
+})
+
+test('测试注释-4', () => {
+    const s = `a:1/haha`
+    expect(run(s)).toBe(`{"a":"1/haha"}`)
+})
+
+test('测试注释-5', () => {
+    const s = `a:1\"`
+    expect(run(s)).toBe(`{"a":"1\""}`)
+})

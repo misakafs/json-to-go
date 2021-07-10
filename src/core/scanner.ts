@@ -7,7 +7,7 @@ const numerics = ['.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 // 转义符
 const escapes = ['"', '']
 // 数字结尾
-const numberEnds = [' ', ',', '\n', '\r', '\t', '}', ']']
+const numberEnds = [' ', ',', '\n', '\r', '\t', '}', ']', '/']
 
 export class Scanner {
     tokens: Token[]
@@ -183,6 +183,11 @@ export class Scanner {
         }
         if (!this.finish(i) && numberEnds.indexOf(this.raw[i]) === -1) {
             return null
+        }
+        if (this.raw[i] === '/') {
+            if (this.raw[i + 1] !== '/' && this.raw[i + 1] !== '*') {
+                return null
+            }
         }
         const value = this.raw.slice(this.index, i)
         this.index = i
