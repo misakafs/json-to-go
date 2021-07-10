@@ -84,7 +84,9 @@ export class Parser {
 
     parseObject(root: Node, level: number = 0) {
         for (; this.index < this.size; this.index++) {
-            this.skip()
+            if (this.skip()) {
+                return
+            }
             if (this.tokens[this.index].tokenType === TokenType.CLOSE_OBJECT) {
                 return
             }
@@ -111,7 +113,9 @@ export class Parser {
 
     parseArray(root: Node, level: number = 0) {
         for (; this.index < this.size; this.index++) {
-            this.skip()
+            if (this.skip()) {
+                return
+            }
             if (this.tokens[this.index].tokenType === TokenType.CLOSE_ARRAY) {
                 return
             }
@@ -128,7 +132,7 @@ export class Parser {
         }
     }
 
-    skip() {
+    skip():boolean {
         while (this.index < this.size) {
             switch (this.tokens[this.index].tokenType) {
                 case TokenType.SEP_COMMA:
@@ -136,8 +140,9 @@ export class Parser {
                     this.index++
                     continue
             }
-            return
+            return false
         }
+        return true
     }
 
     prev(): Token {

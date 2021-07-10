@@ -6,6 +6,8 @@ type TokenEmpty = Token | null
 const numerics = ['.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 // 转义符
 const escapes = ['"', '']
+// 数字结尾
+const numberEnds = [' ',',','\n','\r','\t','}',']']
 
 export class Scanner {
     tokens: Token[]
@@ -127,13 +129,16 @@ export class Scanner {
     parseString(quote: string = ''): TokenEmpty {
         let i = this.index
         let sep = [':', ' ', ']', '}', ',', '\n', '\r']
+        let isQuote = false
         if (quote.length) {
+            isQuote = true
             sep = [quote]
             i++
         }
         while (!this.finish(i)) {
-            if (this.isEscape(i)) {
+            if (isQuote && this.raw[i] == "\\") {
                 i += 2
+                continue
             }
             if (sep.indexOf(this.raw[i]) !== -1) {
                 break
@@ -176,6 +181,9 @@ export class Scanner {
             }
             i++
         }
+        if (!this.finish(i) && numberEnds.indexOf(this.raw[i]) === -1){
+            return null
+        }
         const value = this.raw.slice(this.index, i)
         this.index = i
         if (isDecimal) {
@@ -205,16 +213,5 @@ export class Scanner {
         this.index = endIndex + end.length
         const value = this.raw.slice(nextIndex + 1, endIndex)
         return new Token(TokenType.COMMENT, value, nextIndex + 1)
-    }
-
-    // 判断是否是转义符
-    isEscape(i: number): boolean {
-        if (this.raw[i] !== '\\') {
-            return false
-        }
-        if (escapes.indexOf(this.raw[i + 1]) > -1) {
-            return true
-        }
-        return false
     }
 }

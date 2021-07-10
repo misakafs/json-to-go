@@ -92,6 +92,11 @@ test('测试复杂对象-10', () => {
     expect(run(s)).toBe(s)
 })
 
+test('测试复杂对象-11', () => {
+    const s = `{"result":"Syntax error: Unexpected \\"\\": at \\"\\r>><<\\""}`
+    expect(run(s)).toBe(s)
+})
+
 test('语法扩展-1', () => {
     const s = `{
         "a":123
@@ -127,6 +132,13 @@ test('语法扩展-4', () => {
     d: [1,2,3]
     `
     expect(run(s)).toBe(`{"a":1,"b":true,"c":"xxxx","d":[1,2,3]}`)
+})
+
+test('语法扩展-5', () => {
+    const s = `a:1
+b:2
+c:3dsad`
+    expect(run(s)).toBe(`{"a":1,"b":2,"c":"3dsad"}`)
 })
 
 test('测试注释-1', () => {
