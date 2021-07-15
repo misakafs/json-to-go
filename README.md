@@ -16,8 +16,6 @@
 
 - 构建 `pnpm build`
 
-- 部署到github `pnpm page`
-
 ## 自定义tag
 
 - 格式
