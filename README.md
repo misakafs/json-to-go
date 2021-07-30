@@ -1,37 +1,41 @@
 # json-to-go
 将json生成go的数据结构。Online tool that convert JSON to Go.
 
-## 地址
+## Online Link | 地址
 
-- [国内](https://json-to-go.vercel.app/)
-- [国外](https://misakafs.github.io/json-to-go/)
+- [Link1 | 国内](https://json-to-go.vercel.app/)
+- [Link2 | 国外](https://misakafs.github.io/json-to-go/)
 
-## 本地开发
+## Local Develope | 本地开发
 
-> 强烈建议使用 `pnpm` !!!
 
-- 安装 `pnpm install`
+> suggest use(强烈建议使用) `pnpm` !!!
 
-- 调试 `pnpm dev`
+- install `pnpm install`
 
-- 构建 `pnpm build`
+- dev `pnpm dev`
 
-## 自定义tag
+- build `pnpm build`
 
-- 格式
+## custom tag | 自定义tag
 
-> tag名字:命名方式:是否添加omitempty
+- format | 格式
 
-- 命名方式
+```
+<tag name>:[name method]:[is add omitempty]
+<tag名字>:[命名方式]:[是否添加omitempty]
+```
 
-0. 原样返回
-1. abcDef 小驼峰 - 默认
-2. AbcDef 大驼峰
-3. abc_def 下划线
-4. Abcdef 
-5. abcdef
+- name method | 命名方式
 
-- 例子
+0. original | 原样返回
+1. abcDef | 小驼峰 - 默认
+2. AbcDef | 大驼峰
+3. abc_def | 下划线
+4. Abcdef | 只有第一个字母大写
+5. abcdef | 全都小写
+
+- examples | 例子
 
 `json`
 
@@ -41,17 +45,17 @@
 
 `json:3:false,form:2:true,query:1:false`
 
-## 特征
+## Features | 特征
 
-- 支持自定义tag
-- 支持自定义根对象名
-- 支持内联结构
-- 支持编辑
-- 对json语法进行了扩展，支持不规范的json
-- 支持不规范的json的纠正、格式化、压缩
+- custom tag | 支持自定义tag
+- custom root object name | 支持自定义根对象名
+- support inline | 支持内联结构
+- support edit | 支持编辑
+- json syntax extension | 对json语法进行了扩展，支持不规范的json
+- json check/format/compress | 支持不规范的json的纠正、格式化、压缩
 
 
-## 参考
+## Reference | 参考
 
 - [UI框架](https://primefaces.org/primevue/showcase/#/setup)
 - [ace](https://ace.c9.io/#nav=api)
