@@ -89,34 +89,34 @@ other:{
 export function useMenu() {
     const items = ref([
         {
-            label: 'examples | 例子',
+            label: 'examples/例子',
             items: [
                 {
-                    label: 'example1 | 第一个例子',
+                    label: 'example1/例子1',
                     command: () => {
                         setLeftEditorValue(demo1)
                     }
                 },
                 {
-                    label: 'example2 | 第二个例子',
+                    label: 'example2/例子2',
                     command: () => {
                         setLeftEditorValue(demo2)
                     }
                 },
                 {
-                    label: 'example3 | 第三个例子',
+                    label: 'example3/例子3',
                     command: () => {
                         setLeftEditorValue(demo3)
                     }
                 },
                 {
-                    label: 'example4 | 第四个例子',
+                    label: 'example4/例子4',
                     command: () => {
                         setLeftEditorValue(demo4)
                     }
                 },
                 {
-                    label: 'example5 | 第五个例子',
+                    label: 'example5/例子5',
                     command: () => {
                         setLeftEditorValue(demo5)
                     }
@@ -124,22 +124,22 @@ export function useMenu() {
             ]
         },
         {
-            label: 'Action | 操作',
+            label: 'Action/操作',
             items: [
                 {
-                    label: 'JSON correction | JSON JSON纠正',
+                    label: 'JSON correction/纠正',
                     command: () => {
                         onLeftEditorCheck()
                     }
                 },
                 {
-                    label: 'JSON format | JSON格式化',
+                    label: 'JSON format/格式化',
                     command: () => {
                         onLeftEditorFmt()
                     }
                 },
                 {
-                    label: 'JSON compress | JSON压缩',
+                    label: 'JSON compress/压缩',
                     command: () => {
                         onLeftEditorCompress()
                     }

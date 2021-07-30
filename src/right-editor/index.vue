@@ -1,19 +1,19 @@
 <template>
     <Panel header="GO">
         <template #icons>
-            <button class="p-panel-header-icon p-link p-mr-4" v-tooltip.bottom="'about | 关于'" @click="aboutFn">
+            <button class="p-panel-header-icon p-link p-mr-4" v-tooltip.bottom="'about/关于'" @click="aboutFn">
                 <span class="pi pi-question"></span>
             </button>
             <button class="p-panel-header-icon p-link p-mr-4" v-tooltip.bottom="readonlyWord" @click="switchReadonly">
                 <span class="pi" :class="readonlyIcon"></span>
             </button>
-            <button class="p-panel-header-icon p-link p-mr-2" v-tooltip.bottom="'refresh | 刷新'" @click="refreshFn">
+            <button class="p-panel-header-icon p-link p-mr-2" v-tooltip.bottom="'refresh/刷新'" @click="refreshFn">
                 <span class="pi pi-refresh"></span>
             </button>
-            <button class="right-copy p-panel-header-icon p-link p-mr-2" v-tooltip.bottom="'copy | 复制'">
+            <button class="right-copy p-panel-header-icon p-link p-mr-2" v-tooltip.bottom="'copy/复制'">
                 <span class="pi pi-copy"></span>
             </button>
-            <button class="p-panel-header-icon p-link p-mr-2" v-tooltip.bottom="'setting | 设置'" @click="settingFn">
+            <button class="p-panel-header-icon p-link p-mr-2" v-tooltip.bottom="'setting/设置'" @click="settingFn">
                 <span class="pi pi-cog"></span>
             </button>
         </template>
@@ -27,15 +27,15 @@
 
     <!--  右侧栏  -->
     <Sidebar v-model:visible="displayRightSider" :baseZIndex="1000" position="right" class="p-sidebar-lg" :showCloseIcon="false">
-        <Panel header="Setting | 设置">
+        <Panel header="Setting/设置">
             <div class="p-field-checkbox">
                 <Checkbox id="binary" v-model="inline" :binary="true" />
                 <label for="binary"> IsInline | 是否内联类型</label>
             </div>
-            <h5>Root Object Name | 根对象名</h5>
+            <h5>Root Object Name/根对象名</h5>
             <InputText type="text" v-model="rootName"></InputText>
             <h5>
-                Custom Tag | 自定义Tag <a href="https://github.com/misakafs/json-to-go/blob/main/README.md#%E8%87%AA%E5%AE%9A%E4%B9%89tag" target="_blank">Course | 使用教程</a>
+                Custom Tag/自定义Tag <a href="https://github.com/misakafs/json-to-go/blob/main/README.md#%E8%87%AA%E5%AE%9A%E4%B9%89tag" target="_blank">Course/使用教程</a>
             </h5>
             <InputText type="text" v-model="tag"></InputText>
         </Panel>
@@ -59,11 +59,11 @@ const aboutFn = () => {
 
 // 只读/编辑
 const readonly = ref(false)
-const readonlyWord = ref('Readonly | 只读')
+const readonlyWord = ref('Readonly/只读')
 const readonlyIcon = ref('pi-eye')
 const switchReadonly = () => {
     readonly.value = !readonly.value
-    readonlyWord.value = readonly.value ? 'Edit | 编辑' : 'Readonly | 只读'
+    readonlyWord.value = readonly.value ? 'Edit/编辑' : 'Readonly/只读'
     readonlyIcon.value = readonly.value ? 'pi-pencil' : 'pi-eye'
     editor.value.setReadOnly(readonly.value)
 }
