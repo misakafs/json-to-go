@@ -34,7 +34,9 @@
             </div>
             <h5>Root Object Name | 根对象名</h5>
             <InputText type="text" v-model="rootName"></InputText>
-            <h5>Custom Tag | 自定义Tag <a href="https://github.com/misakafs/json-to-go/blob/main/README.md#%E8%87%AA%E5%AE%9A%E4%B9%89tag" target="_blank">Course | 使用教程</a></h5>
+            <h5>
+                Custom Tag | 自定义Tag <a href="https://github.com/misakafs/json-to-go/blob/main/README.md#%E8%87%AA%E5%AE%9A%E4%B9%89tag" target="_blank">Course | 使用教程</a>
+            </h5>
             <InputText type="text" v-model="tag"></InputText>
         </Panel>
     </Sidebar>
