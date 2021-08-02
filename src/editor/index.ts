@@ -12,7 +12,9 @@ export enum Mode {
 export function useEditor(id: string, mode?: Mode) {
     const editor = ref<any>(null)
     onMounted(() => {
-        editor.value = ace.edit(id)
+        editor.value = ace.edit(id, {
+            useWorker: false
+        })
         editor.value.setTheme('ace/theme/tomorrow')
         if (mode) {
             editor.value.session.setMode(mode)

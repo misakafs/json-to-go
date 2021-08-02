@@ -72,3 +72,9 @@ const transformFn = () => {
     onLeftEditorTransform()
 }
 </script>
+<style>
+.ace_invalid {
+	background-color: inherit!important;
+	color: #718C00!important;
+}
+</style>
