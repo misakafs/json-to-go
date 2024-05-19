@@ -29,7 +29,7 @@
     "@types/ace": "^0.0.46",
     "@types/debounce": "^1.2.0",
     "@types/humps": "^2.0.0",
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^27.0.3",
     "@types/vfile-message": "^2.0.0",
     "@vitejs/plugin-vue": "^1.2.2",
     "@vue/compiler-sfc": "^3.0.11",
