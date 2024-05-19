@@ -11,10 +11,9 @@ export default defineConfig({
     build: {
         target: 'es2015',
         rollupOptions: {
-            external: ['ace-builds', 'vue'],
+            external: ['ace-builds'],
             plugins: [
                 externalGlobals({
-                    vue: 'Vue',
                     'ace-builds': 'ace'
                 })
             ]
